@@ -1,9 +1,9 @@
-import Hero from "./Home/Hero"
+import Home from "./Home/Home"
 import NavBar from "./Navbar/NavBar"
 import PageNotFound from "./PageNotFound"
 
 export {
     NavBar,
-    Hero,
+    Home,
     PageNotFound,
 }

@@ -1,8 +1,34 @@
 ::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
-*{
+:root {
+ --primary-color:#264653;
+
+}
+
+* {
   margin: 0;
   padding: 0;
+}
+section {
+  padding-top: 70px;
+}
+
+.warning-card{
+background-color: var(--primary-color);
+}
+.text-second{
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .hide-in-mobile {
+    display: none;
+  }
+}
+
+.eight-product {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }

@@ -24,7 +24,7 @@ const NavBar = () => {
           }}
         >
           <img
-            src="https://github.com/mdo.png"
+            src="https://github.com/sangamprashant.png"
             alt=""
             width="32"
             height="32"
