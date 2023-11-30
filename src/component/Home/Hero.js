@@ -11,11 +11,33 @@ function Hero() {
               <div>
                 <h1 className="mb-4">
                   {HeroData.Heading.first}
-                  <span className="text-second">
-                    {HeroData.Heading.second}
-                  </span>
+                  <span className="text-second">{HeroData.Heading.second}</span>
                 </h1>
                 <p className="lead">{HeroData.paragraph}</p>
+                <div className="col-md-12">
+                  <form>
+                    <div className="d-flex gap-3">
+                      <input
+                        type="text"
+                        placeholder="Email"
+                        className="form-control p-2"
+                      />
+                      <button type="submit" className="btn btn-primary p-2">
+                        Submit
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div className="col-md-12 row">
+                  {HeroData.count.map((d) => (
+                    <div className="w-25 p-2">
+                      <div className="card d-flex justify-content-center align-items-center">
+                        <h1>{d.data}</h1>
+                        <p>{d.label}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="col-md-6 d-flex justify-content-center">
