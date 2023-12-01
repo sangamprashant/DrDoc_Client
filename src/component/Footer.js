@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FooterData } from "./rawdata";
+import { FooterData, theme } from "./rawdata";
 
 function Footer() {
   return (
-    <footer className="bg-dark text-white py-5">
+    <footer className={`text-white py-5 mt-5`} style={{backgroundColor:theme}}>
       <div className="container">
         <div className="row">
           <div className="col-md-4 mb-4">

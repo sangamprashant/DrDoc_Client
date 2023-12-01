@@ -4,13 +4,15 @@
 
 :root {
   --primary-color: #264653;
+  --primary-color-hover: #366172;
+  --white: white;
 }
 
 * {
   margin: 0;
   padding: 0;
 }
-a{
+a {
   text-decoration: none;
 }
 
@@ -35,29 +37,42 @@ section {
   }
 }
 
+/* hero */
+.heading{
+  font-size:larger;
+}
+
 .eight-product {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-/* Tablet */
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   .eight-product {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
-/* Tablet */
 @media (max-width: 768px) {
   .eight-product {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-
-
-/* Small devices (portrait phones) */
 @media (max-width: 375px) and (orientation: portrait) {
   .eight-product {
     grid-template-columns: 1fr;
   }
+}
+
+.our-app-download {
+  color: var(--primary-color);
+  background-color: transparent;
+  border: none;
+  padding: 5px 5px;
+  border-radius: 5px;
+}
+
+.our-app-download:hover {
+  fill: var(--primary-color);
+  color: var(--primary-color-hover);
 }

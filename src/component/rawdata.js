@@ -1,4 +1,7 @@
-import { Clock, Secure } from "./Svgs";
+import { Bag, Clock, Secure } from "./Svgs";
+import { logoSide, google, apple, home, mobileImage, global } from "../assets";
+
+const theme = "#264653";
 
 const menuItems = [
   { label: "Orders", path: "/orders" },
@@ -6,6 +9,7 @@ const menuItems = [
   { label: "Customers", path: "/customers" },
 ];
 const HeroData = {
+  logoSide: logoSide,
   Heading: {
     first: "Dr",
     second: "Doc",
@@ -14,23 +18,14 @@ const HeroData = {
   blanditiis fugit quas beatae animi omnis eos accusantium tempora,
   quos itaque, cum quis labore libero. Ab, vel nostrum! Atque,
   possimus quasi.`,
-  image: "https://github.com/sangamprashant.png",
-  count: [
+  image: home,
+  icon:<Bag height="20"/>,
+  mobile: [
     {
-      label: "one",
-      data: "123",
+      logo: google,
     },
     {
-      label: "one",
-      data: "123",
-    },
-    {
-      label: "one",
-      data: "123",
-    },
-    {
-      label: "one",
-      data: "123",
+      logo: apple,
     },
   ],
 };
@@ -47,25 +42,38 @@ const OfferData = [
   },
 ];
 const OurAppData = {
-  heading: "Our app DrDoc",
-  image: "https://thewatchdogonline.com/wp-content/uploads/2021/01/image.jpeg",
+  image: mobileImage,
   details: [
     {
-      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora dignissimos rem itaque ipsa eius dolorum commodi. Amet sunt labore eum sequi quo rem autem consequuntur nisi suscipit, consequaturadipisci. Tempore.",
+      bg: theme,
+      icon: <Bag height="30" stroke="white" />,
+      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
+      title: "secure",
     },
     {
-      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora dignissimos rem itaque ipsa eius dolorum commodi. Amet sunt labore eum sequi quo rem autem consequuntur nisi suscipit, consequaturadipisci. Tempore.",
+      bg: "gold",
+      icon: <Bag height="30" stroke="white" />,
+      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
+      title: "secure",
     },
     {
-      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora dignissimos rem itaque ipsa eius dolorum commodi. Amet sunt labore eum sequi quo rem autem consequuntur nisi suscipit, consequaturadipisci. Tempore.",
+      bg: "maroon",
+      icon: <Bag height="30" stroke="white" />,
+      title: "secure",
+      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
     },
     {
-      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora dignissimos rem itaque ipsa eius dolorum commodi. Amet sunt labore eum sequi quo rem autem consequuntur nisi suscipit, consequaturadipisci. Tempore.",
-    },
-    {
-      data: `Lorem ipsum, dolor sit amet <strong>consectetur</strong> adipisicing elit. Tempora dignissimos rem itaque ipsa eius dolorum commodi. Amet sunt labore eum sequi quo rem autem consequuntur nisi suscipit, consequaturadipisci. Tempore.`,
+      bg: "red",
+      icon: <Bag height="30" stroke="white" />,
+      data: "Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
+      title: "secure",
     },
   ],
+  download: {
+    link: "https://github.com/sangamprashant",
+    logo: <Bag height="30" />,
+    content: "Download",
+  },
 };
 const FooterData = {
   About: {
@@ -112,12 +120,41 @@ const PageNotFoundData = {
   message: "Please check the url and go to home",
   button: "Go to Home",
 };
+const CommunityData = {
+  image: global,
+  heading: [
+    { sp: "Join our ", st: "global community" },
+    {
+      sp: " and get access to a better way to ",
+      st: "manage your medical records",
+    },
+  ],
+  card: [
+    {
+      count: "10K+",
+      label: "USER",
+      color: "#e76f51",
+    },
+    {
+      count: "100K+",
+      label: "PRODUCTS",
+      color: "#287271",
+    },
+    {
+      count: "25K+",
+      label: "INSTANCES",
+      color: "maroon",
+    },
+  ],
+};
 
 export {
+  theme,
   menuItems,
   HeroData,
   OfferData,
   PageNotFoundData,
   OurAppData,
   FooterData,
+  CommunityData,
 };

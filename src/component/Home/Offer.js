@@ -6,8 +6,8 @@ function Offer() {
     <div className="container">
       <div className="row">
         {OfferData.map((data) => (
-          <div className="p-4" style={{ width: "50%" }}>
-            <div className="warning-card rounded-4 text-white  p-5 d-flex align-items-center">
+          <div className="p-4 " style={{ width: "50%" }}>
+            <div className="warning-card rounded-4 text-white  p-5 d-flex align-items-center shadow-lg">
               <div
                 className="hide-in-mobile"
                 style={{

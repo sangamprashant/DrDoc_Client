@@ -3,6 +3,7 @@ import Hero from './Hero'
 import Offer from './Offer'
 import EightProduct from './EightProduct'
 import OurApp from './OurApp'
+import Community from './Community'
 
 function Home() {
   useEffect(() => {
@@ -14,6 +15,7 @@ function Home() {
       <Offer/>
       <EightProduct/>
       <OurApp/>
+      <Community/>
     </>
   )
 }
