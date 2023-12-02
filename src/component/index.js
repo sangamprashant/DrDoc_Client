@@ -1,3 +1,4 @@
+import Contact from "./Contact/Contact"
 import Footer from "./Footer"
 import Home from "./Home/Home"
 import Login from "./Log/Login"
@@ -12,4 +13,5 @@ export {
     Footer,
     Login,
     Register,
+    Contact,
 }

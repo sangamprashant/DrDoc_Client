@@ -1,4 +1,4 @@
-import { Bag, Clock, Secure } from "./Svgs";
+import { Bag, Clock, Mobile, Secure } from "./Svgs";
 import { logoSide, google, apple, home, mobileImage, global } from "../assets";
 
 const theme = "#264653";
@@ -19,7 +19,7 @@ const HeroData = {
   quos itaque, cum quis labore libero. Ab, vel nostrum! Atque,
   possimus quasi.`,
   image: home,
-  icon:<Bag height="20"/>,
+  icon: <Mobile height="20" />,
   mobile: [
     {
       logo: google,
@@ -77,7 +77,7 @@ const OurAppData = {
 };
 const FooterData = {
   About: {
-    title: "About Us",
+    title: "DrDoc",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   QuickLink: {
@@ -147,6 +147,24 @@ const CommunityData = {
     },
   ],
 };
+const ContactInfo = [
+  {
+    title: "Contact Information",
+    content:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet esse quidem laudantium quae",
+  },
+  {
+    title: "Address",
+    content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet",
+    className: "default-text",
+  },
+  { title: "Phone", content: "Lorem ipsum, dolor", className: "default-text" },
+  {
+    title: "Email",
+    content: "Lorem ipsum, dolor sit amet",
+    className: "default-text",
+  },
+];
 
 export {
   theme,
@@ -157,4 +175,5 @@ export {
   OurAppData,
   FooterData,
   CommunityData,
+  ContactInfo,
 };

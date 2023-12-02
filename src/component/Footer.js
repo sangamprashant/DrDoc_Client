@@ -4,11 +4,14 @@ import { FooterData, theme } from "./rawdata";
 
 function Footer() {
   return (
-    <footer className={`text-white py-5 mt-5`} style={{backgroundColor:theme}}>
+    <footer
+      className={`text-white py-5 mt-5`}
+      style={{ backgroundColor: theme }}
+    >
       <div className="container">
         <div className="row">
           <div className="col-md-4 mb-4">
-            <h5>{FooterData.About.title}</h5>
+            <h1>{FooterData.About.title}</h1>
             <p>{FooterData.About.description}</p>
           </div>
           <div className="col-md-4 mb-4">
@@ -16,7 +19,7 @@ function Footer() {
             <ul className="list-unstyled">
               {FooterData.QuickLink.links.map((links) => (
                 <li>
-                  <Link className="btn btn-dark" to={links.link}>
+                  <Link className="btn text-white" to={links.link}>
                     {links.lable}
                   </Link>
                 </li>

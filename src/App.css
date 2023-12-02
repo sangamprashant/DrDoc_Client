@@ -1,5 +1,6 @@
 ::-webkit-scrollbar {
   display: none;
+  width: 0px;
 }
 
 :root {
@@ -20,6 +21,11 @@ p {
   margin-bottom: 0rem;
   padding: 0;
 }
+
+.btn-primary{
+  background-color: var(--primary-color);
+}
+
 section {
   padding-top: 70px;
 }
