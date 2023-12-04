@@ -4,6 +4,7 @@ import Offer from './Offer'
 import EightProduct from './EightProduct'
 import OurApp from './OurApp'
 import Community from './Community'
+import DownloadApp from './DownloadApp'
 
 function Home() {
   useEffect(() => {
@@ -15,6 +16,7 @@ function Home() {
       <Offer/>
       <EightProduct/>
       <OurApp/>
+      <DownloadApp/>
       <Community/>
     </>
   )

@@ -1,9 +1,3 @@
-:root {
-  --primary-color: #009dff;
-  --primary-color-hover: #366172;
-  --white: white;
-}
-
 .contact-image {
   position: relative;
   background-image: url("../../assets/building.jpeg");
