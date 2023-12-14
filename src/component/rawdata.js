@@ -13,7 +13,7 @@ const theme = "#264653";
 
 const menuItems = [
   { label: "Orders", path: "/orders" },
-  { label: "Products", path: "/products" },
+  { label: "Products", path: "/product" },
   { label: "Customers", path: "/customers" },
 ];
 const HeroData = {

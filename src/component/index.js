@@ -5,6 +5,7 @@ import Login from "./Log/Login"
 import Register from "./Log/Register"
 import NavBar from "./Navbar/NavBar"
 import PageNotFound from "./PageNotFound"
+import OurProduct from "./Product/OurProduct"
 
 export {
     NavBar,
@@ -14,4 +15,5 @@ export {
     Login,
     Register,
     Contact,
+    OurProduct,
 }

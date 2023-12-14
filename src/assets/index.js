@@ -6,6 +6,7 @@ import mobileImage from "./mobile.webp";
 import global from "./global.png";
 import building from "./building.jpeg";
 import mobileDownload from "./mobile.jpg";
+import SearchImage from "./search.png"
 
 export {
   logoSide,
@@ -16,4 +17,5 @@ export {
   global,
   building,
   mobileDownload,
+  SearchImage,
 };

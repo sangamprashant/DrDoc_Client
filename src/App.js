@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Contact, Footer, Home, Login, NavBar, PageNotFound, Register } from "./component";
+import { Contact, Footer, Home, Login, NavBar, OurProduct, PageNotFound, Register } from "./component";
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
         <Route exact path="/signin" element={<Login/>} />
         <Route exact path="/register" element={<Register/>} />
         <Route exact path="/contact" element={<Contact/>} />
+        <Route exact path="/product" element={<OurProduct/>} />
         <Route exact path="*" element={<PageNotFound />} />
       </Routes>
       <Footer/>
