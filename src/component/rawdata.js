@@ -1,5 +1,13 @@
 import { Bag, Clock, Mobile, Secure } from "./Svgs";
-import { logoSide, google, apple, home, mobileImage, global } from "../assets";
+import {
+  logoSide,
+  google,
+  apple,
+  home,
+  mobileImage,
+  global,
+  mobileDownload,
+} from "../assets";
 
 const theme = "#264653";
 
@@ -165,6 +173,9 @@ const ContactInfo = [
     className: "default-text",
   },
 ];
+const DownloadAppData = {
+  image: mobileDownload,
+};
 
 export {
   theme,
@@ -176,4 +187,5 @@ export {
   FooterData,
   CommunityData,
   ContactInfo,
+  DownloadAppData,
 };

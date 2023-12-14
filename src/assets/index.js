@@ -5,5 +5,15 @@ import home from "./home.webp";
 import mobileImage from "./mobile.webp";
 import global from "./global.png";
 import building from "./building.jpeg";
+import mobileDownload from "./mobile.jpg";
 
-export { logoSide, google, apple, home, mobileImage, global, building };
+export {
+  logoSide,
+  google,
+  apple,
+  home,
+  mobileImage,
+  global,
+  building,
+  mobileDownload,
+};
