@@ -82,3 +82,7 @@ section {
   fill: var(--primary-color);
   color: var(--primary-color-hover);
 }
+
+.h-full{
+  height: 100vh;
+}

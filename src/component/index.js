@@ -3,6 +3,7 @@ import Footer from "./Footer"
 import Home from "./Home/Home"
 import Login from "./Log/Login"
 import Register from "./Log/Register"
+import Verify from "./Log/Verify"
 import NavBar from "./Navbar/NavBar"
 import PageNotFound from "./PageNotFound"
 import OurProduct from "./Product/OurProduct"
@@ -16,4 +17,5 @@ export {
     Register,
     Contact,
     OurProduct,
+    Verify
 }
