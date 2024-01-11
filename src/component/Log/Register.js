@@ -1,11 +1,68 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Import useHistory to redirect after successful login
 import { theme } from "../rawdata";
+import { toast } from "react-toastify";
 
 function Register() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.password.trim()
+    ) {
+      return toast.info("All fields are required.");
+    }
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_DATABASE_API}/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        toast.success(response.data.message);
+      } else {
+        const data = await response.json();
+        setError(data.error || "Registration failed");
+        toast.error(data.error)
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setError("Internal server error");
+      toast.error(error.response.data.error)
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className="container row"
@@ -18,37 +75,53 @@ function Register() {
       }}
     >
       <div className="col-md-6">
-        <h1>Welcome Back</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est
-          quibusdam, reiciendis repellat ratione modi tenetur voluptas totam
-          consectetur in labore quo alias dicta! Perferendis obcaecati delectus
-          dignissimos blanditiis quam molestias.
-        </p>
-        <p>Welcome Back</p>
+        <h1>Welcome to DrDoc</h1>
+        <h3>
+          An integrated platform to save your medical records and easily access
+          whenever you want.
+        </h3>
       </div>
       <div className="col-md-4">
         <div className="card p-5" style={{ backgroundColor: `${theme}` }}>
-          <form action="">
+          <form onSubmit={handleRegister}>
             <h1 className="text-white">Register</h1>
             <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="form-control mt-3"
+              placeholder="Name"
+              required
+            />
+            <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               className="form-control mt-3"
               placeholder="Email"
+              required
             />
             <input
               type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               className="form-control mt-3"
               placeholder="Password"
+              required
             />
             <input
               type="submit"
               className="form-control mt-3 btn btn-light"
-              value={"Register"}
+              value="Register"
+              disabled={loading}
             />
           </form>
-          <p>
-            Already having an account? <Link to="/signin">Click here</Link>
+          {error && <p className="text-white">{error}</p>}
+          <p className="text-white">
+            Already have an account? <Link to="/signin">Click here</Link>
           </p>
         </div>
       </div>

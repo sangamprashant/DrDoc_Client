@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Contact, Footer, Home, Login, NavBar, OurProduct, PageNotFound, Register, Verify } from "./component";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route exact path="*" element={<PageNotFound />} />
       </Routes>
       <Footer/>
+      <ToastContainer theme="dark"/>
     </BrowserRouter>
   );
 }

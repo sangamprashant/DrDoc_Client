@@ -22,7 +22,7 @@ p {
   padding: 0;
 }
 
-.btn-primary{
+.btn-primary {
   background-color: var(--primary-color);
 }
 
@@ -44,8 +44,8 @@ section {
 }
 
 /* hero */
-.heading{
-  font-size:larger;
+.heading {
+  font-size: larger;
 }
 
 .eight-product {
@@ -83,6 +83,6 @@ section {
   color: var(--primary-color-hover);
 }
 
-.h-full{
+.h-full {
   height: 100vh;
 }
