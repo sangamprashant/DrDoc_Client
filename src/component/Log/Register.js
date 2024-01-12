@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Import useHistory to redirect after successful login
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; // Import useHistory to redirect after successful login
 import { theme } from "../rawdata";
 import { toast } from "react-toastify";
+import Modal from "react-modal";
+import { AuthContext } from "../../AuthContext";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,10 +13,19 @@ function Register() {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isLogged } = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/");
+    }
+  }, [isLogged]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +34,6 @@ function Register() {
       [name]: value,
     });
   };
-
   const handleRegister = async (e) => {
     e.preventDefault();
     if (
@@ -34,7 +44,6 @@ function Register() {
       return toast.info("All fields are required.");
     }
     setLoading(true);
-
     try {
       const response = await fetch(
         `${process.env.REACT_APP_DATABASE_API}/register`,
@@ -46,21 +55,30 @@ function Register() {
           body: JSON.stringify(formData),
         }
       );
-
-      if (response.ok) {
-        toast.success(response.data.message);
+      const data = await response.json();
+      if (response.status === 200) {
+        toast.success(data?.message);
+        setIsModalOpen(true);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        });
       } else {
-        const data = await response.json();
-        setError(data.error || "Registration failed");
-        toast.error(data.error)
+        setError(data?.error || "Registration failed");
+        toast.error(data?.error);
       }
     } catch (error) {
       console.error("Error during registration:", error);
       setError("Internal server error");
-      toast.error(error.response.data.error)
+      toast.error(error?.response?.data?.error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -115,7 +133,7 @@ function Register() {
             <input
               type="submit"
               className="form-control mt-3 btn btn-light"
-              value="Register"
+              value={loading ? "Please wait.." : "Register"}
               disabled={loading}
             />
           </form>
@@ -125,6 +143,21 @@ function Register() {
           </p>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Email Sent Modal"
+        className="d-flex justify-content-center align-items-center flex-column h-100 bg-white"
+      >
+        <h2>Email Sent!</h2>
+        <p>
+          We have sent a verification email. Please check your inbox and follow
+          the instructions to verify your email.
+        </p>
+        <button className="btn btn-primary" onClick={closeModal}>
+          Close
+        </button>
+      </Modal>
     </div>
   );
 }
