@@ -7,6 +7,7 @@ import global from "./global.png";
 import building from "./building.jpeg";
 import mobileDownload from "./mobile.jpg";
 import SearchImage from "./search.png"
+import UserImage from "./user.jpeg"
 
 export {
   logoSide,
@@ -18,4 +19,5 @@ export {
   building,
   mobileDownload,
   SearchImage,
+  UserImage,
 };

@@ -5,8 +5,8 @@ function Offer() {
   return (
     <div className="container">
       <div className="row">
-        {OfferData.map((data) => (
-          <div className="p-4 " style={{ width: "50%" }}>
+        {OfferData.map((data, index) => (
+          <div className="p-4 " style={{ width: "50%" }} key={index}>
             <div className="warning-card rounded-4 text-white  p-5 d-flex align-items-center shadow-lg">
               <div
                 className="hide-in-mobile"

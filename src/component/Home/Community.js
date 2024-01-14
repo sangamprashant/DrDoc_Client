@@ -7,8 +7,8 @@ function Community() {
       <div className="text-center d-grid align-items-center justify-content-center">
         <div className="d-flex justify-content-center">
           <h2 className="col-md-6">
-            {CommunityData.heading.map(data=>(<><span className="text-muted">{data.sp}</span>
-            <strong className="">{data.st}</strong></>))}
+            {CommunityData.heading.map(data=>(<React.Fragment key={data.sp}><span className="text-muted">{data.sp}</span>
+            <strong className="">{data.st}</strong></React.Fragment>))}
           </h2>
         </div>
       </div>

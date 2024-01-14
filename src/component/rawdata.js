@@ -12,9 +12,13 @@ import {
 const theme = "#264653";
 
 const menuItems = [
-  { label: "Orders", path: "/orders" },
   { label: "Products", path: "/product" },
-  { label: "Customers", path: "/customers" },
+];
+const LogedUserMenuItems = [
+  { label: "Profile", path: "/profile" },
+  { label: "My Doctors", path: "/mydoctors" },
+  { label: "My Orders", path: "/orders" },
+  { label: "Cart", path: "/cart" },
 ];
 const HeroData = {
   logoSide: logoSide,
@@ -188,4 +192,5 @@ export {
   CommunityData,
   ContactInfo,
   DownloadAppData,
+  LogedUserMenuItems,
 };

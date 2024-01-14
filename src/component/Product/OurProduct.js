@@ -1,5 +1,6 @@
 import React from "react";
 import { SearchImage } from "../../assets";
+import ProductCard from "./ProductCard";
 
 const products = [
   {
@@ -75,29 +76,9 @@ const products = [
   },
 ];
 
-const StarRating = ({ rating }) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating - fullStars >= 0.5;
-
-  const renderFullStars = () => {
-    const stars = [];
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={i}>&#9733;</span>); // Full star character
-    }
-    return stars;
-  };
-  return (
-    <div className="star-rating">
-      {renderFullStars()}
-      {hasHalfStar && <span>&#9734;</span>} 
-    </div>
-  );
-};
-
 const handelSearch = (e) => {
-e.preventDefault()
-
-}
+  e.preventDefault();
+};
 
 const OurProduct = () => {
   return (
@@ -111,27 +92,8 @@ const OurProduct = () => {
         </div>
       </form>
       <div className="eight-product">
-        {products.map((product) => (
-          <div key={product.id} className="p-2">
-            <div className="card">
-              <img
-                height="200px"
-                width="100%"
-                className="object-fit-contain"
-                src={product.image}
-                alt={product.name}
-              />
-              <div className="p-2">
-                <h5>{product.name}</h5>
-                <p>{product.price}</p>
-                <StarRating rating={parseFloat(product.star)} />
-                <div className="d-flex justify-content-between">
-                  <button className="btn btn-danger">Buy now</button>
-                  <button className="btn btn-danger">Add to Cart</button>
-                </div>
-              </div>
-            </div>
-          </div>
+        {products.map((product, index) => (
+          <ProductCard product={product} key={index} />
         ))}
       </div>
     </div>

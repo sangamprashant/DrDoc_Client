@@ -2,14 +2,13 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
+import Spinner from "./Spinner"; // Import a loading spinner component if available
 
 function Verify() {
   const { token } = useParams();
-  const [first, setFirst] = useState(true);
-  const [second, setSecond] = useState(false);
-  const [third, setThird] = useState(false);
+  const [verificationPhase, setVerificationPhase] = useState("pending"); // 'pending', 'success', 'error'
   const [errorMsg, setErrorMsg] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { setIsLogged } = useContext(AuthContext);
 
   useEffect(() => {
@@ -26,36 +25,37 @@ function Verify() {
 
       if (response.status === 200) {
         sessionStorage.setItem("token", response.data.token);
-        setThird(true);
-        setFirst(false);
-        setIsLogged(true)
+        setIsLogged(true);
+        setVerificationPhase("success");
+
+        // Redirect after a short delay
         setTimeout(() => {
           navigate("/");
         }, 5000);
       }
     } catch (error) {
       console.log(error);
-      setErrorMsg(error.response.data.error);
-      setSecond(true);
-      setFirst(false);
+      setErrorMsg(error.response?.data?.error || "Unexpected error");
+      setVerificationPhase("error");
     }
   };
 
   return (
     <div className="h-full w-100 d-flex justify-content-center align-items-center">
-      {first && (
+      {verificationPhase === "pending" && (
         <div className="card shadow-lg p-5 text-primary">
+          <Spinner /> {/* Use a loading spinner or animation here */}
           <h1>Please wait verifying</h1>
         </div>
       )}
-      {second && (
+      {verificationPhase === "error" && (
         <div className="card shadow-lg p-5 text-danger">
-          <h2>{errorMsg ? errorMsg : "verification failed"}</h2>
+          <h2>{errorMsg ? errorMsg : "Verification failed"}</h2>
         </div>
       )}
-      {third && (
+      {verificationPhase === "success" && (
         <div className="card shadow-lg p-5">
-          <h1 className="text-success">verification done</h1>
+          <h1 className="text-success">Verification done</h1>
           <p>Redirecting to the profile page</p>
         </div>
       )}

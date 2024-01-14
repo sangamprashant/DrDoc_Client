@@ -124,6 +124,7 @@ function Register() {
             <input
               type="password"
               name="password"
+              autoComplete="false"
               value={formData.password}
               onChange={handleInputChange}
               className="form-control mt-3"

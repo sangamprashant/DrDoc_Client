@@ -18,7 +18,7 @@ function Footer() {
             <h5>{FooterData.QuickLink.title}</h5>
             <ul className="list-unstyled">
               {FooterData.QuickLink.links.map((links) => (
-                <li>
+                <li key={links.link}>
                   <Link className="btn text-white" to={links.link}>
                     {links.lable}
                   </Link>
@@ -29,8 +29,8 @@ function Footer() {
           <div className="col-md-4 mb-4">
             <h5>{FooterData.Contact.title}</h5>
             <address>
-              {FooterData.Contact.data.map((contact) => (
-                <p>{contact.label}</p>
+              {FooterData.Contact.data.map((contact, index) => (
+                <p key={index}>{contact.label}</p>
               ))}
             </address>
           </div>

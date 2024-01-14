@@ -1,0 +1,31 @@
+.profile-container {
+  width: 100%;
+  max-width: 1100px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.profile-container .profile-section {
+  align-items: center;
+}
+
+.profile-container .profile-section .profile-details p {
+  margin: 0;
+  padding: 0;
+}
+
+.document-image-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+.document-image-container .document-image > img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  cursor: pointer;
+}
+.document-image-container .document-image > img:hover {
+  border: 2px solid rgb(219, 219, 255);
+  filter: blur(0.6px);
+}

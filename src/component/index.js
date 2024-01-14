@@ -7,6 +7,9 @@ import Verify from "./Log/Verify"
 import NavBar from "./Navbar/NavBar"
 import PageNotFound from "./PageNotFound"
 import OurProduct from "./Product/OurProduct"
+import ProductCard from "./Product/ProductCard"
+import Profile from "./User/Profile"
+import Upload from "./User/Upload"
 
 export {
     NavBar,
@@ -17,5 +20,8 @@ export {
     Register,
     Contact,
     OurProduct,
-    Verify
+    Verify,
+    Profile,
+    Upload,
+    ProductCard,
 }

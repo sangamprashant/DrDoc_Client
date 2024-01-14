@@ -32,8 +32,8 @@ function OurApp() {
         </div>
         <div className="col-md-6 p-2">
           <div className="row">
-            {OurAppData.details.map((data) => (
-              <div className="w-50">
+            {OurAppData.details.map((data, index) => (
+              <div className="w-50" key={index}>
                 <div
                   className="p-2 rounded-5 shadow d-inline-block"
                   style={{ backgroundColor: data.bg }}

@@ -27,8 +27,8 @@ function AppLink() {
         </span>
       </div>
       <div className="row d-flex justify-content-center gap-3 mt-1">
-        {HeroData.mobile.map((data) => (
-          <div className="w-25 py-2 bg-black rounded-5">
+        {HeroData.mobile.map((data, index) => (
+          <div className="w-25 py-2 bg-black rounded-5" key={index}>
             <img
               className="object-fit-contain"
               src={data.logo}
