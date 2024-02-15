@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import { AuthContext } from "../../AuthContext";
 
 function Register() {
+  const {setToken, isLogged , setIsLogged } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,7 +16,6 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const { isLogged } = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,7 +46,7 @@ function Register() {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_DATABASE_API}/register`,
+        `${process.env.REACT_APP_DATABASE_API}/common/register`,
         {
           method: "POST",
           headers: {
@@ -56,22 +56,25 @@ function Register() {
         }
       );
       const data = await response.json();
-      if (response.status === 200) {
+      if (data.success) {
         toast.success(data?.message);
         setIsModalOpen(true);
+        sessionStorage.setItem("token", data.token)
+        setToken(data.token)
+        setIsLogged(true)
         setFormData({
           name: "",
           email: "",
           password: "",
         });
       } else {
-        setError(data?.error || "Registration failed");
-        toast.error(data?.error);
+        setError(data?.message || "Registration failed");
+        toast.error(data?.message);
       }
     } catch (error) {
       console.error("Error during registration:", error);
       setError("Internal server error");
-      toast.error(error?.response?.data?.error);
+      toast.error(error?.response?.data?.message || "Somethimg weng wrong");
     } finally {
       setLoading(false);
     }
@@ -144,21 +147,6 @@ function Register() {
           </p>
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Email Sent Modal"
-        className="d-flex justify-content-center align-items-center flex-column h-100 bg-white"
-      >
-        <h2>Email Sent!</h2>
-        <p>
-          We have sent a verification email. Please check your inbox and follow
-          the instructions to verify your email.
-        </p>
-        <button className="btn btn-primary" onClick={closeModal}>
-          Close
-        </button>
-      </Modal>
     </div>
   );
 }

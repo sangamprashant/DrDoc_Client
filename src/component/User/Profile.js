@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserImage } from "../../assets";
 import { EditIcon, FileUploadIcon } from "../ReactIcons";
 import "./Profile.css";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthContext";
+import Container from "../Container/Container";
 
 function Profile() {
   const navigate = useNavigate();
@@ -16,17 +17,15 @@ function Profile() {
   }, [isLogged]);
 
   return (
-    <div
-      className="container d-flex justify-content-center"
-      style={{ marginTop: "100px" }}
+    <
     >
       {LoggedUserData ? (
-        <div className="profile-container shadow-lg">
+        <Container className="profile-container shadow-lg">
           <div className="d-flex justify-content-between align-items-center">
             <h2>Profile </h2>
-            <button className="btn btn-outline-secondary">
+            <Link className="btn btn-outline-secondary" to="/edit">
               <EditIcon /> Edit
-            </button>
+            </Link>
           </div>
           <hr />
           <div className="profile-section row">
@@ -41,9 +40,9 @@ function Profile() {
             </div>
             <div className="col-md-4">
               <div className="profile-details">
-                <h4>{LoggedUserData.personal.name}</h4>
-                <p>{LoggedUserData.personal.email}</p>
-                <p>{LoggedUserData.personal.dateOfBirth}</p>
+                <h4>{LoggedUserData?.personal?.name}</h4>
+                <p>{LoggedUserData?.personal?.email}</p>
+                <p>{LoggedUserData?.personal?.dateOfBirth}</p>
               </div>
             </div>
             {(LoggedUserData?.address?.address ||
@@ -55,12 +54,12 @@ function Profile() {
               <div className="col-md-4">
                 <div className="profile-details">
                   <h4>Address Information</h4>
-                  <p>{LoggedUserData.address.address}</p>
-                  <p>{LoggedUserData.address.city}</p>
-                  <p>{LoggedUserData.address.phone}</p>
-                  <p>{LoggedUserData.address.currentAddress}</p>
-                  <p>{LoggedUserData.address.pin}</p>
-                  <p>{LoggedUserData.address.country}</p>
+                  <p>{LoggedUserData?.address?.address}</p>
+                  <p>{LoggedUserData?.address?.city}</p>
+                  <p>{LoggedUserData?.address?.phone}</p>
+                  <p>{LoggedUserData?.address?.currentAddress}</p>
+                  <p>{LoggedUserData?.address?.pin}</p>
+                  <p>{LoggedUserData?.address?.country}</p>
                 </div>
               </div>
             )}
@@ -68,12 +67,12 @@ function Profile() {
 
           <div className="d-flex justify-content-between align-items-center mt-5">
             <h2>Documents & Reports</h2>
-            <button
+            <Link
               className="btn btn-outline-secondary"
-              onClick={() => navigate("/upload")}
+              to="/upload"
             >
               <FileUploadIcon /> Upload
-            </button>
+            </Link>
           </div>
           <hr />
           <div className="document-image-container">
@@ -99,12 +98,12 @@ function Profile() {
               <img src={UserImage} alt="Profile Pic" />
             </div>
           </div>
-        </div>
+        </Container>
       ) : (
         <div className="spinner-border" role="status">
         </div>
       )}
-    </div>
+    </>
   );
 }
 

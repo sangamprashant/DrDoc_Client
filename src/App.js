@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import {
   Contact,
+  EditProfile,
   Footer,
   Home,
   Login,
@@ -38,7 +39,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AuthContext.Provider value={{ isLogged, setIsLogged, token, setToken, LoggedUserData }}>
+      <AuthContext.Provider value={{ isLogged, setIsLogged, token, setToken, LoggedUserData,setLoggedUserData }}>
         <NavBar />
         <Routes>
           {/* public */}
@@ -50,6 +51,7 @@ function App() {
           {/* private */}
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/upload" element={<Upload />} />
+          <Route exact path="/edit" element={<EditProfile />} />
 
           <Route exact path="/verify/:token" element={<Verify />} />
           <Route exact path="*" element={<PageNotFound />} />

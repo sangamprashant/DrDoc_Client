@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { theme } from "../rawdata";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../AuthContext";
+import { BASE_API } from "../../config";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ function Login() {
       return toast.info("All fields are required.")
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_DATABASE_API}/login`, {
+      const response = await fetch(`${BASE_API}/common/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,17 +43,17 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      if (response.status === 200) {
+      if (data.success) {
         toast.success("Login successful")
         sessionStorage.setItem("token", data.token)
         setToken(data.token)
         setIsLogged(true)
       } else {
-        toast.error(data?.error || "Login failed");
+        toast.error(data?.message || "Login failed");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toast.error(error.response.data.error)
+      toast.error(error.response.data.message || "Something wen wrong")
     }
   };
 
