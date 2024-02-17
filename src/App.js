@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import {
+  AccountSwitch,
   Contact,
   EditProfile,
   Footer,
@@ -52,6 +53,7 @@ function App() {
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/upload" element={<Upload />} />
           <Route exact path="/edit" element={<EditProfile />} />
+          <Route exact path="/accountSwitch" element={<AccountSwitch />} />
 
           <Route exact path="/verify/:token" element={<Verify />} />
           <Route exact path="*" element={<PageNotFound />} />

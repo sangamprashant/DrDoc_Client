@@ -6,7 +6,7 @@
 }
 
 .profile-container .profile-section {
-  align-items: center;
+  /* align-items: center; */
 }
 
 .profile-container .profile-section .profile-details p {
@@ -19,7 +19,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
 }
-.document-image-container .document-image > img {
+.document-image-container .document-image  img {
   width: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;

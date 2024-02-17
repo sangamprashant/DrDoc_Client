@@ -9,6 +9,7 @@ import NavBar from "./Navbar/NavBar";
 import PageNotFound from "./PageNotFound";
 import OurProduct from "./Product/OurProduct";
 import ProductCard from "./Product/ProductCard";
+import AccountSwitch from "./User/AccountSwitch";
 import EditProfile from "./User/EditProfile";
 import Profile from "./User/Profile";
 import Upload from "./User/Upload";
@@ -28,4 +29,5 @@ export {
   Upload,
   ProductCard,
   EditProfile,
+  AccountSwitch
 };
