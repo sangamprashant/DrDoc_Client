@@ -75,6 +75,18 @@ const MenuItems = [
       },
     ],
   },
+  {
+    label: "Email & Password",
+    key: "Authentication",
+    icon: Icons.KeyIcon,
+    children:[
+      {
+        label: <Link to="/edit" className=" text-decoration-none">Change Password</Link>,
+        key: "password",
+        icon: Icons.PasswordIcon,
+    }
+    ]
+  },
 ];
 
 export { MenuItems, TableRow };

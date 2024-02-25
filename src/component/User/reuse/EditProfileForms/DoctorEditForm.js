@@ -1,6 +1,32 @@
 import React from "react";
 
-function DoctorEditForm() {
+function DoctorEditForm({ userData, setUserData }) {
+  const [degreeFile, setDegreeFile] = React.useState(null);
+  const [imageFiles, setImageFiles] = React.useState([]);
+
+
+  const handleDoctorInput = (e) => {
+    const { name, value } = e.target;
+    setUserData((prev) => ({
+      ...prev,
+      hospital: {
+        ...prev.hospital,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleDegreeFileChange = (e) => {
+    const file = e.target.files[0];
+    setDegreeFile(file);
+  };
+
+  const handleImageFilesChange = (e) => {
+    const files = e.target.files;
+    setImageFiles(Array.from(files));
+    // You can preview the selected files here if needed
+  };
+
   return (
     <>
       <h4>Doctor Form</h4>
@@ -13,6 +39,8 @@ function DoctorEditForm() {
             id="hospitalName"
             name="hospitalName"
             placeholder="Hospital name"
+            value={userData?.hospital?.hospitalName}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -23,6 +51,8 @@ function DoctorEditForm() {
             id="specialization"
             name="specialization"
             placeholder="Specialization"
+            value={userData?.hospital?.specialization}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -33,6 +63,8 @@ function DoctorEditForm() {
             id="experienceYears"
             name="experienceYears"
             placeholder="experienceYears"
+            value={userData?.hospital?.experienceYears}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -43,6 +75,8 @@ function DoctorEditForm() {
             id="location"
             name="location"
             placeholder="location"
+            value={userData?.hospital?.location}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -53,6 +87,8 @@ function DoctorEditForm() {
             id="department"
             name="department"
             placeholder="department"
+            value={userData?.hospital?.department}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -63,6 +99,8 @@ function DoctorEditForm() {
             id="bedsAvailable"
             name="bedsAvailable"
             placeholder="bedsAvailable"
+            value={userData?.hospital?.bedsAvailable}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -73,6 +111,8 @@ function DoctorEditForm() {
             id="website"
             name="website"
             placeholder="website"
+            value={userData?.hospital?.website}
+            onChange={handleDoctorInput}
           />
         </div>
         <div className="col-md-6">
@@ -83,37 +123,81 @@ function DoctorEditForm() {
             id="perConsultantCharge"
             name="perConsultantCharge"
             placeholder="perConsultantCharge"
+            value={userData?.hospital?.perConsultantCharge}
+            onChange={handleDoctorInput}
           />
         </div>
+        <hr className="mt-4" />
         <div className="col-md-6">
           <label htmlFor="certification">Doctor Degree</label>
           <input
             type="text"
             className="form-control"
-            id="certification"
-            name="certification"
-            placeholder="certification"
+            id="doctorDegree"
+            name="doctorDegree"
+            placeholder="doctorDegree"
+            value={userData?.hospital?.doctorDegree}
+            onChange={handleDoctorInput}
           />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="certification">Doctor Degree File</label>
+          <label className="mt-3" htmlFor="certification">
+            Doctor Degree File
+          </label>
           <input
             type="file"
             className="form-control"
             id="certification"
             name="certification"
             placeholder="certification"
+            accept="image/*"
+            onChange={handleDegreeFileChange}
           />
         </div>
         <div className="col-md-6">
-          <label htmlFor="certification"> Hospital certification</label>
+          <label className="mt-3" htmlFor="certification">
+            Doctor Degree Preview
+          </label>
+          {degreeFile && (
+            <div className="d-flex justify-content-center bg-secondary-subtle p-2 rounded">
+              <img
+                height={200}
+                width={200}
+                src={URL.createObjectURL(degreeFile)}
+                alt=""
+                className="object-fit-contain"
+              />
+            </div>
+          )}
+        </div>
+        <hr className="mt-4" />
+        <div className="col-md-6">
+          <label htmlFor="images">Hospital Images</label>
           <input
             type="file"
             className="form-control"
-            id="certification"
-            name="certification"
-            placeholder="certification"
+            id="images"
+            name="images"
+            multiple
+            accept="image/*"
+            onChange={handleImageFilesChange}
           />
+        </div>
+        
+        {/* Preview selected hospital images */}
+        <div className="col-md-6">
+          <label className="mt-3" htmlFor="imageFiles">
+            Hospital Images Preview
+          </label>
+          {imageFiles.map((file, index) => (
+            <div key={index} className="d-flex justify-content-center bg-secondary-subtle p-2 rounded">
+              <img
+                height={100}
+                width={100}
+                src={URL.createObjectURL(file)}
+                alt=""
+                className="object-fit-contain"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </>

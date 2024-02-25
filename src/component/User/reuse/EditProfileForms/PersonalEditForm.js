@@ -187,7 +187,7 @@ function PersonalEditForm({ userData, setUserData }) {
           <label htmlFor="image" className="form-label">
             Profile picture
           </label>
-          <Dragger {...props} onChange={handleImageChange}>
+          <Dragger {...props} onChange={handleImageChange} accept="image/*">
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
