@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Navbar, Nav, Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogedUserMenuItems, menuItems } from "../rawdata";
 import { AuthContext } from "../../AuthContext";
 
@@ -14,6 +14,88 @@ const NavBar = () => {
   const handelLogout = async () => {
     sessionStorage.clear();
     setIsLogged(false);
+  };
+
+  const UserOptions = () => {
+    return (
+      <>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Profile
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <Link class="dropdown-item" to="/profile">
+                My Profile
+              </Link>
+            </li>
+            <li>
+              <Link class="dropdown-item" to="/edit">
+                Edit Profile
+              </Link>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <Link class="dropdown-item" to="/upload">
+                Upload Document
+              </Link>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Email & Password
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <Link class="dropdown-item" to="/profile">
+                Change Password
+              </Link>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Setting
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <Link class="dropdown-item" to="/accountSwitch?query=doctor">
+                Doctor
+              </Link>
+            </li>
+            <li>
+              <Link class="dropdown-item" to="/accountSwitch?query=user">
+                User
+              </Link>
+            </li>
+          </ul>
+        </li>
+        <li className="nav-item">
+          <Link class="nav-link" to="/search">Search Doctors</Link>
+        </li>
+      </>
+    );
   };
 
   return (
@@ -51,31 +133,7 @@ const NavBar = () => {
           className="justify-content-between"
           onSelect={closeNavbar}
         >
-          <Nav className="mr-auto">
-            {menuItems.map((item, index) => (
-              <Nav.Link
-                key={index}
-                onClick={() => {
-                  closeNavbar();
-                  navigate(item.path);
-                }}
-              >
-                {item.label}
-              </Nav.Link>
-            ))}
-            {isLogged &&
-              LogedUserMenuItems.map((item, index) => (
-                <Nav.Link
-                  key={index}
-                  onClick={() => {
-                    closeNavbar();
-                    navigate(item.path);
-                  }}
-                >
-                  {item.label}
-                </Nav.Link>
-              ))}
-          </Nav>
+          <Nav className="mr-auto">{isLogged && UserOptions()}</Nav>
         </Navbar.Collapse>
         <Nav>
           <Nav.Link className="d-flex justify-content-between gap-2 w-full">

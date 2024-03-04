@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Hero from './Hero'
 import Offer from './Offer'
-import EightProduct from './EightProduct'
 import OurApp from './OurApp'
 import Community from './Community'
 import DownloadApp from './DownloadApp'
@@ -14,7 +13,6 @@ function Home() {
     <>
       <Hero/>
       <Offer/>
-      <EightProduct/>
       <OurApp/>
       <DownloadApp/>
       <Community/>

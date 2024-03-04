@@ -6,19 +6,23 @@ import DeliveryEditForm from "../reuse/EditProfileForms/DeliveryEditForm";
 import SellerEditForm from "../reuse/EditProfileForms/SellerEditForm";
 import { AuthContext } from "../../../AuthContext";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_API } from "../../../config";
+import { useNavigate } from "react-router-dom";
 
 function AccountSwitch() {
   const { token, LoggedUserData, setLoggedUserData } =
     React.useContext(AuthContext);
   const [query, setQuery] = useState("");
   const [userData, setUserData] = useState(null);
-  const [loading ,setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
+  const navigation = useNavigate();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const queryString = queryParams.get("query");
     setQuery(queryString);
-  }, []);
+  }, [window.location.search, navigation]);
 
   React.useEffect(() => {
     setUserData(JSON.parse(JSON.stringify(LoggedUserData)));
@@ -27,13 +31,18 @@ function AccountSwitch() {
   const handleApply = async (e) => {
     e.preventDefault();
     let isValid = true;
-  
+
+    if (
+      !userData?.bank?.bankAccount ||
+      !userData?.bank?.accountHolderName ||
+      !userData?.bank?.ifcCode ||
+      !userData?.bank?.branch
+    ) {
+      return toast.warning("Bank details are missing.");
+    }
+
     if (query === "doctor") {
       const doctorFields = [
-        "bankAccount",
-        "accountHolderName",
-        "ifcCode",
-        "branch",
         "hospitalName",
         "specialization",
         "experienceYears",
@@ -44,72 +53,75 @@ function AccountSwitch() {
         "doctorDegree",
         "doctorDegreeFile",
         "perConsultantCharge",
-        "images",
+        "images", // Check if it's an array and not empty
       ];
-      isValid = doctorFields.every(field => userData.hospital[field] !== undefined && userData.hospital[field] !== null && (typeof userData.hospital[field] !== 'number' || !isNaN(userData.hospital[field])));
-    } else if (query === "delivery") {
-      const deliveryFields = [
-        "bankAccount",
-        "accountHolderName",
-        "ifcCode",
-        "branch",
-        "vehicleType",
-        "vehicleNumber",
-        "experienceYears",
-        "deliveryAreas",
-        "licenseNumber",
-        "licenseExpiryDate",
-        "vehicleModel",
-        "vehicleCapacity",
-      ];
-      isValid = deliveryFields.every(field => userData.delivery[field] !== undefined && userData.delivery[field] !== null && (typeof userData.delivery[field] !== 'number' || !isNaN(userData.delivery[field])));
-    } else if (query === "seller") {
-      const sellerFields = [
-        "bankAccount",
-        "accountHolderName",
-        "ifcCode",
-        "branch",
-        "storeName",
-        "location",
-        "ratings",
-        "openingHours",
-        "closingHours",
-        "images",
-      ];
-      isValid = sellerFields.every(field => userData.store[field] !== undefined && userData.store[field] !== null && (typeof userData.store[field] !== 'number' || !isNaN(userData.store[field])));
+      isValid = doctorFields.every(
+        (field) =>
+          userData?.hospital[field] !== undefined &&
+          userData?.hospital[field] !== null &&
+          userData?.hospital[field] !== "" &&
+          (typeof userData?.hospital[field] !== "number" ||
+            !isNaN(userData?.hospital[field])) &&
+          (Array.isArray(userData?.hospital[field])
+            ? userData?.hospital[field].length > 0
+            : true) // Check if it's an array and not empty
+      );
     }
 
-    console.log(userData)
-  
     if (!isValid) {
       toast.error("Some fields are missing or invalid.");
       return;
     }
-
-    if (query === "doctor") {
-      toast.success("Doctor");
-    } else if (query === "delivery") {
-      toast.success("Delivery");
-    } else if (query === "seller") {
-      toast.success("Seller");
+    try {
+      const response = await axios.put(
+        `${BASE_API}/user/user/update`,
+        {
+          userData: userData,
+          query: query,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setLoggedUserData(response.data.user);
+      }
+      console.log(response.data.user)
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      toast.error("Failed to update user data. Please try again later.");
     }
   };
-  
 
   return (
     <Container>
       <Heading title={`Apply for ${query}`} />
       <hr />
-      <BankEditForm userData={userData} setUserData={setUserData} />
-      {query === "doctor" ? (
-        <DoctorEditForm userData={userData} setUserData={setUserData} />
-      ) : query === "delivery" ? (
-        <DeliveryEditForm userData={userData} setUserData={setUserData} />
-      ) : query === "seller" ? (
-        <SellerEditForm userData={userData} setUserData={setUserData} />
-      ) : null}
+      <BankEditForm
+        userData={userData}
+        setUserData={setUserData}
+        loading={loading}
+        setLoading={setLoading}
+      />
+      {query === "doctor" && (
+        <DoctorEditForm
+          userData={userData}
+          setUserData={setUserData}
+          loading={loading}
+          setLoading={setLoading}
+        />
+      )}
       <div className="d-flex justify-content-end mt-2">
-        <button className="btn btn-primary" onClick={handleApply}>Apply</button>
+        <button
+          disabled={loading}
+          className="btn btn-primary"
+          onClick={handleApply}
+        >
+          {loading ? "Please wait.." : "Apply"}
+        </button>
       </div>
     </Container>
   );

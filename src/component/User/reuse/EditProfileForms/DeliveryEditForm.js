@@ -98,15 +98,24 @@ function DeliveryEditForm({ userData, setUserData }) {
           </div>
           <div className="col-md-6">
             <label htmlFor="licenseExpiryDate">License Expiry Date</label>
-            <input
-              id="licenseExpiryDate"
-              type="date"
-              className="form-control"
-              name="licenseExpiryDate"
-              placeholder="License expiry date"
-              value={userData?.delivery?.licenseExpiryDate || ""}
-              onChange={handleDeliveryInput}
-            />
+            <div className="d-flex gap-2">
+              <input
+                id="licenseExpiryDate"
+                type="date"
+                className="form-control"
+                name="licenseExpiryDate"
+                placeholder="License expiry date"
+                value={userData?.delivery?.licenseExpiryDate || ""}
+                onChange={handleDeliveryInput}
+              />
+              <span className="btn">{">"}</span>
+              <input
+                type="text"
+                disabled
+                className="form-control"
+                value={userData?.delivery?.licenseExpiryDate || ""}
+              />
+            </div>
           </div>
           <div className="col-md-6">
             <label htmlFor="vehicleModel">Vehicle Model</label>
@@ -134,7 +143,7 @@ function DeliveryEditForm({ userData, setUserData }) {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <label htmlFor="deliveryAreas">Delivery Areas</label>
             <div className="d-flex gap-2">
               <input
@@ -148,9 +157,16 @@ function DeliveryEditForm({ userData, setUserData }) {
                   setAddressInput(e.target.value);
                 }}
               />
-              <button type="button" className="btn btn-primary" onClick={handleAddToList}>{Icons.AddIcon}</button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleAddToList}
+              >
+                {Icons.AddIcon}
+              </button>
             </div>
           </div>
+          <hr className="mt-4" />
           <div className="col-md 6">
             <table className="table">
               <thead>
@@ -165,6 +181,7 @@ function DeliveryEditForm({ userData, setUserData }) {
                     <td>{area}</td>
                     <td>
                       <button
+                        type="button"
                         className="btn btn-danger"
                         onClick={() => handleRemoveFromList(index)}
                       >

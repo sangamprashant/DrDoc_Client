@@ -21,23 +21,6 @@ function AppLink() {
           </div>
         </form>
       </div>
-      <div className="row d-flex justify-content-center gap-3 mt-4 text-muted">
-        <span className="w-50 text-center">
-          {HeroData.icon}Experience the DrDoc mobile app
-        </span>
-      </div>
-      <div className="row d-flex justify-content-center gap-3 mt-1">
-        {HeroData.mobile.map((data, index) => (
-          <div className="w-25 py-2 bg-black rounded-5" key={index}>
-            <img
-              className="object-fit-contain"
-              src={data.logo}
-              width={"100%"}
-              alt="mobile"
-            />
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

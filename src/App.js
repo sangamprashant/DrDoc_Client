@@ -8,10 +8,10 @@ import {
   Home,
   Login,
   NavBar,
-  OurProduct,
   PageNotFound,
   Profile,
   Register,
+  Search,
   Upload,
   Verify,
 } from "./component";
@@ -48,7 +48,7 @@ function App() {
           <Route exact path="/signin" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/contact" element={<Contact />} />
-          <Route exact path="/product" element={<OurProduct />} />
+          <Route exact path="/search" element={<Search />} />
           {/* private */}
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/upload" element={<Upload />} />

@@ -6,7 +6,7 @@ import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import Container from "../Container/Container";
 import { Menu, Tabs } from "antd";
-import { MenuItems, TableRow } from "./ProfileData";
+import { TableRow } from "./ProfileData";
 
 function Profile() {
   const navigate = useNavigate();
@@ -31,16 +31,6 @@ function Profile() {
     }
   }, [LoggedUserData]);
 
-  const filteredMenuItems = MenuItems.filter((menuItem) => {
-    if (menuItem.key === "Setting") {
-      menuItem.children[0].children = menuItem.children[0].children.filter(
-        (child) => {
-          return !child.key.includes(userRole.toLowerCase());
-        }
-      );
-    }
-    return true;
-  });
 
   // Function to count non-empty content values
   const countContentValues = () => {
@@ -63,8 +53,6 @@ function Profile() {
       label: "Documents & Reports",
       children: (
         <>
-          <div className="d-flex justify-content-end align-items-center"></div>
-          <hr />
           <div className="document-image-container">
             <div className="document-image">
               <img src={UserImage} alt="Profile Pic" />
@@ -186,12 +174,7 @@ function Profile() {
   return (
     <>
       {LoggedUserData ? (
-        <Container className="profile-container shadow-lg">
-          <div className="d-flex justify-content-between">
-            <h2>Profile </h2>
-            <Menu mode="horizontal" items={filteredMenuItems} />
-          </div>
-          <hr />
+        <Container className="profile-container ">
           <div className="profile-section row">
             <div className="col-md-4 d-flex justify-content-center">
               <img

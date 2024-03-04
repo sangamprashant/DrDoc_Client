@@ -1,9 +1,9 @@
 import React from "react";
+import { storage } from "../../../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-function DoctorEditForm({ userData, setUserData }) {
+function DoctorEditForm({ userData, setUserData, loading, setLoading }) {
   const [degreeFile, setDegreeFile] = React.useState(null);
-  const [imageFiles, setImageFiles] = React.useState([]);
-
 
   const handleDoctorInput = (e) => {
     const { name, value } = e.target;
@@ -16,15 +16,55 @@ function DoctorEditForm({ userData, setUserData }) {
     }));
   };
 
-  const handleDegreeFileChange = (e) => {
+  const handleDegreeFileChange = async (e) => {
     const file = e.target.files[0];
+    let link;
     setDegreeFile(file);
+    setLoading(true);
+    link = await handleUploadToFireBase(file);
+    setLoading(false);
+    setUserData((prev) => ({
+      ...prev,
+      hospital: {
+        ...prev.hospital,
+        doctorDegreeFile: link,
+      },
+    }));
+    console.log("link is:", link);
   };
 
-  const handleImageFilesChange = (e) => {
+  const handleImageFilesChange = async (e) => {
     const files = e.target.files;
-    setImageFiles(Array.from(files));
-    // You can preview the selected files here if needed
+    const urls = [];
+    setLoading(true);
+    for (let file of files) {
+      const url = await handleUploadToFireBase(file);
+      if (url) {
+        urls.push(url);
+      }
+    }
+    setUserData((prev) => ({
+      ...prev,
+      hospital: {
+        ...prev.hospital,
+        images: [...prev.hospital.images, ...urls],
+      },
+    }));
+    console.log("images links", urls);
+    setLoading(false);
+  };
+
+  const handleUploadToFireBase = async (selectImage) => {
+    try {
+      const fileRef = ref(storage, `DrDoc/${Date.now() + selectImage.name}`);
+      await uploadBytes(fileRef, selectImage);
+      const downloadURL = await getDownloadURL(fileRef);
+      console.log(downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading file: ", error);
+      return null;
+    }
   };
 
   return (
@@ -161,7 +201,7 @@ function DoctorEditForm({ userData, setUserData }) {
               <img
                 height={200}
                 width={200}
-                src={URL.createObjectURL(degreeFile)}
+                src={userData?.hospital?.doctorDegreeFile}
                 alt=""
                 className="object-fit-contain"
               />
@@ -181,23 +221,23 @@ function DoctorEditForm({ userData, setUserData }) {
             onChange={handleImageFilesChange}
           />
         </div>
-        
-        {/* Preview selected hospital images */}
         <div className="col-md-6">
           <label className="mt-3" htmlFor="imageFiles">
             Hospital Images Preview
           </label>
-          {imageFiles.map((file, index) => (
-            <div key={index} className="d-flex justify-content-center bg-secondary-subtle p-2 rounded">
-              <img
-                height={100}
-                width={100}
-                src={URL.createObjectURL(file)}
-                alt=""
-                className="object-fit-contain"
-              />
-            </div>
-          ))}
+          <div className=" d-flex gap-3 flex-wrap  bg-secondary-subtle p-2 rounded">
+            {userData?.hospital?.images?.map((file, index) => (
+              <div key={index}>
+                <img
+                  height={100}
+                  width="100px"
+                  src={file}
+                  alt=""
+                  className="object-fit-contain"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

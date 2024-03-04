@@ -7,8 +7,7 @@ import Register from "./Log/Register";
 import Verify from "./Log/Verify";
 import NavBar from "./Navbar/NavBar";
 import PageNotFound from "./PageNotFound";
-import OurProduct from "./Product/OurProduct";
-import ProductCard from "./Product/ProductCard";
+import Search from "./Search";
 import AccountSwitch from "./User/AccountSwitch";
 import EditProfile from "./User/EditProfile";
 import Profile from "./User/Profile";
@@ -23,11 +22,10 @@ export {
   Login,
   Register,
   Contact,
-  OurProduct,
   Verify,
   Profile,
   Upload,
-  ProductCard,
   EditProfile,
-  AccountSwitch
+  AccountSwitch,
+  Search,
 };

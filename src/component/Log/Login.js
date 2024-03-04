@@ -17,7 +17,7 @@ function Login() {
 
   useEffect(()=>{
     if(isLogged){
-      navigate("/")
+      navigate("/profile")
     }
   })
 

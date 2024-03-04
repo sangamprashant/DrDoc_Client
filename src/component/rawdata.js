@@ -10,16 +10,6 @@ import {
 } from "../assets";
 
 const theme = "#264653";
-
-const menuItems = [
-  { label: "Products", path: "/product" },
-];
-const LogedUserMenuItems = [
-  { label: "Profile", path: "/profile" },
-  { label: "My Doctors", path: "/mydoctors" },
-  { label: "My Orders", path: "/orders" },
-  { label: "Cart", path: "/cart" },
-];
 const HeroData = {
   logoSide: logoSide,
   Heading: {
@@ -183,7 +173,6 @@ const DownloadAppData = {
 
 export {
   theme,
-  menuItems,
   HeroData,
   OfferData,
   PageNotFoundData,
@@ -192,5 +181,4 @@ export {
   CommunityData,
   ContactInfo,
   DownloadAppData,
-  LogedUserMenuItems,
 };

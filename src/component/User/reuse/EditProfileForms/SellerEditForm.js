@@ -1,7 +1,9 @@
 import React from "react";
 import { TimePicker } from "antd";
+import { storage } from "../../../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-function SellerEditForm({ userData, setUserData }) {
+function SellerEditForm({ userData, setUserData, setLoading }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
@@ -34,6 +36,40 @@ function SellerEditForm({ userData, setUserData }) {
           closingHours: time.format("HH:mm a"),
         },
       }));
+    }
+  };
+
+  const handleImageFilesChange = async (e) => {
+    const files = e.target.files;
+    const urls = [];
+    setLoading(true);
+    for (let file of files) {
+      const url = await handleUploadToFireBase(file);
+      if (url) {
+        urls.push(url);
+      }
+    }
+    setUserData((prev) => ({
+      ...prev,
+      store: {
+        ...prev.store,
+        images: [...prev.store.images, ...urls],
+      },
+    }));
+    console.log("images links", urls);
+    setLoading(false);
+  };
+
+  const handleUploadToFireBase = async (selectImage) => {
+    try {
+      const fileRef = ref(storage, `DrDoc/${Date.now() + selectImage.name}`);
+      await uploadBytes(fileRef, selectImage);
+      const downloadURL = await getDownloadURL(fileRef);
+      console.log(downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading file: ", error);
+      return null;
     }
   };
 
@@ -112,13 +148,31 @@ function SellerEditForm({ userData, setUserData }) {
             <label htmlFor="images">Images</label>
             <input
               id="images"
-              type="text"
+              type="file"
               className="form-control"
               name="images"
+              accept="image/*"
+              multiple
               placeholder="Enter image URLs"
-              value={userData?.store?.images?.join(", ") || ""}
-              onChange={handleInputChange}
+              onChange={handleImageFilesChange}
             />
+          </div>
+          <div className="col-md-12 mt-2">
+            <label htmlFor="images">Images Preview</label>
+            <div className="flex flex-wrap gap-3">
+              {userData?.store?.images.map((data, index) => (
+                <>
+                  <img
+                    width="100px"
+                    height="100%"
+                    className=" object-fit-contain m-1"
+                    src={data}
+                    alt=""
+                    key={index}
+                  />
+                </>
+              ))}
+            </div>
           </div>
         </div>
       </form>

@@ -56,7 +56,7 @@ function EditProfile() {
         <PersonalEditForm userData={userData} setUserData={setUserData} />
         <AddressEditForm userData={userData} setUserData={setUserData} />
         {!LoggedUserData?.isUser && <BankEditForm userData={userData} setUserData={setUserData} />}
-        {LoggedUserData?.isDoctor && <DoctorEditForm />}
+        {LoggedUserData?.isDoctor && <DoctorEditForm userData={userData} setUserData={setUserData} />}
         {LoggedUserData?.isDelivery && <DeliveryEditForm userData={userData} setUserData={setUserData}/>}
         {LoggedUserData?.isSeller && <SellerEditForm userData={userData} setUserData={setUserData}/>}
         <button type="submit" className="btn btn-primary">
