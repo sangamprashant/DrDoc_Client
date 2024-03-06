@@ -3,24 +3,23 @@ import { HeroData } from "../rawdata";
 
 function AppLink() {
   return (
-    <div>
-      <div className="col-md-12">
-        <form>
-          <div className="d-flex gap-3">
-            <input
-              type="text"
-              placeholder="Email"
-              className="form-control rounded-5 p-3"
-            />
-            <button
-              type="submit"
-              className="btn btn-primary rounded-5 p-3 px-5 text-nowrap"
-            >
-              Get App Link
-            </button>
-          </div>
-        </form>
-      </div>
+    <div className="col-md-12">
+      <form>
+        <p className="text-center text-muted">Subscribe to our newsletter</p>
+        <div className="d-flex gap-3">
+          <input
+            type="email"
+            placeholder="Email"
+            className="form-control rounded-5 p-3"
+          />
+          <button
+            type="submit"
+            className="btn btn-primary rounded-5 p-3 px-5 text-nowrap"
+          >
+            Subscribe
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

@@ -4,22 +4,23 @@ import { theme } from "../rawdata";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../AuthContext";
 import { BASE_API } from "../../config";
+import { Icons } from "../../icons";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {setToken, isLogged , setIsLogged } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const { setToken, isLogged, setIsLogged } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(()=>{
-    if(isLogged){
-      navigate("/profile")
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/profile");
     }
-  })
+  });
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -31,8 +32,8 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if(!email.trim() || !password.trim()){
-      return toast.info("All fields are required.")
+    if (!email.trim() || !password.trim()) {
+      return toast.info("All fields are required.");
     }
     try {
       const response = await fetch(`${BASE_API}/common/login`, {
@@ -44,16 +45,16 @@ function Login() {
       });
       const data = await response.json();
       if (data.success) {
-        toast.success("Login successful")
-        sessionStorage.setItem("token", data.token)
-        setToken(data.token)
-        setIsLogged(true)
+        toast.success("Login successful");
+        sessionStorage.setItem("token", data.token);
+        setToken(data.token);
+        setIsLogged(true);
       } else {
         toast.error(data?.message || "Login failed");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toast.error(error.response.data.message || "Something wen wrong")
+      toast.error(error.response.data.message || "Something wen wrong");
     }
   };
 
@@ -102,9 +103,17 @@ function Login() {
             />
             <input
               type="submit"
-              className="form-control mt-3 btn btn-light"
+              className="form-control mt-3 btn btn-light "
               value="Sign In"
             />
+            <hr />
+            <p className="text-center">Login with Face</p>
+            <button 
+              type="button"
+              className="form-control mt-3 btn btn-light text-lg-center"
+            >
+              {Icons.SensorOccupiedIcon}
+            </button>
           </form>
           <p>
             Not having an account? <Link to="/register">Click here</Link>
