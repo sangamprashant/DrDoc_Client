@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import { AuthContext } from "../../AuthContext";
 
 function Register() {
-  const {setToken, isLogged , setIsLogged } = useContext(AuthContext);
+  const { setToken, isLogged, setIsLogged } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -59,9 +59,9 @@ function Register() {
       if (data.success) {
         toast.success(data?.message);
         setIsModalOpen(true);
-        sessionStorage.setItem("token", data.token)
-        setToken(data.token)
-        setIsLogged(true)
+        sessionStorage.setItem("token", data.token);
+        setToken(data.token);
+        setIsLogged(true);
         setFormData({
           name: "",
           email: "",
@@ -86,65 +86,70 @@ function Register() {
 
   return (
     <div
-      className="container row"
-      style={{
+      className="container"
+
+    >
+      <div className="row"       style={{
         paddingTop: "70px",
         height: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-      }}
-    >
-      <div className="col-md-6">
-        <h1>Welcome to DrDoc</h1>
-        <h3>
-          An integrated platform to save your medical records and easily access
-          whenever you want.
-        </h3>
-      </div>
-      <div className="col-md-4">
-        <div className="card p-5" style={{ backgroundColor: `${theme}` }}>
-          <form onSubmit={handleRegister}>
-            <h1 className="text-white">Register</h1>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className="form-control mt-3"
-              placeholder="Name"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="form-control mt-3"
-              placeholder="Email"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              autoComplete="false"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="form-control mt-3"
-              placeholder="Password"
-              required
-            />
-            <input
-              type="submit"
-              className="form-control mt-3 btn btn-light"
-              value={loading ? "Please wait.." : "Register"}
-              disabled={loading}
-            />
-          </form>
-          {error && <p className="text-white">{error}</p>}
-          <p className="text-white">
-            Already have an account? <Link to="/signin">Click here</Link>
-          </p>
+      }}>
+        <div className="col-md-4">
+          <div className="card p-5" style={{ backgroundColor: `${theme}` }}>
+            <form onSubmit={handleRegister}>
+              <h1 className="text-white">Welcome to DrDoc</h1>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="form-control mt-3"
+                placeholder="Name"
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="form-control mt-3"
+                placeholder="Email"
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                autoComplete="false"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="form-control mt-3"
+                placeholder="Password"
+                required
+              />
+              <input
+                type="submit"
+                className="form-control mt-3 btn btn-light"
+                value={loading ? "Please wait.." : "GET STARTED"}
+                disabled={loading}
+              />
+            </form>
+            {error && <p className="text-white">{error}</p>}
+          
+          </div>
+        </div>
+        <div className="col-md-4">
+          <h1>24/7 Access to Care</h1>
+          <h5>
+            We need just a few piece of information to confirm your benefits.
+            Please make sure that the personal information you enter is the same
+            as that on record with your health plan.
+          </h5>
+          <hr />
+          <p className="text-muted">
+              Already have an account? <br /> <Link to="/signin" className="btn text-white" style={{backgroundColor:theme}}>Continue LogIn</Link>
+            </p>
         </div>
       </div>
     </div>

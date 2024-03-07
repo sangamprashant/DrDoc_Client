@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Navbar, Nav, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { LogedUserMenuItems, menuItems } from "../rawdata";
+import { LogedUserMenuItems, menuItems, theme } from "../rawdata";
 import { AuthContext } from "../../AuthContext";
+import { home } from "../../assets";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -58,12 +59,23 @@ const NavBar = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Email & Password
+            Doctor
           </a>
           <ul class="dropdown-menu">
             <li>
-              <Link class="dropdown-item" to="/profile">
-                Change Password
+              <Link class="dropdown-item" to="/mydoctor">
+                My Doctors
+              </Link>
+            </li>
+            <li>
+              <Link class="dropdown-item" to="/message">Messages</Link>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <Link class="dropdown-item" to="search">
+                Search Doctor
               </Link>
             </li>
           </ul>
@@ -81,18 +93,23 @@ const NavBar = () => {
           <ul class="dropdown-menu">
             <li>
               <Link class="dropdown-item" to="/accountSwitch?query=doctor">
-                Doctor
+                Apply for Doctor
               </Link>
             </li>
             <li>
               <Link class="dropdown-item" to="/accountSwitch?query=user">
-                User
+                Apply for User
+              </Link>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <Link class="dropdown-item" to="/upload">
+                Change Password
               </Link>
             </li>
           </ul>
-        </li>
-        <li className="nav-item">
-          <Link class="nav-link" to="/search">Search Doctors</Link>
         </li>
       </>
     );
@@ -100,7 +117,7 @@ const NavBar = () => {
 
   return (
     <Navbar
-      style={{ backgroundColor: "#264653" }}
+      style={{ backgroundColor: theme }}
       variant="dark"
       expand="lg"
       fixed="top"
@@ -114,10 +131,10 @@ const NavBar = () => {
           }}
         >
           <img
-            src="https://github.com/sangamprashant.png"
+            src={home}
             alt=""
-            width="32"
-            height="32"
+            width="40"
+            height="40"
             className="rounded-circle me-2"
           />
           DrDoc
@@ -133,27 +150,31 @@ const NavBar = () => {
           className="justify-content-between"
           onSelect={closeNavbar}
         >
-          <Nav className="mr-auto">{isLogged && UserOptions()}</Nav>
+          <Nav className="mr-auto">
+          <li className="nav-item">
+            <Link className="nav-link" to="/contact">Contact</Link>
+          </li>
+          {isLogged && UserOptions()}</Nav>
         </Navbar.Collapse>
         <Nav>
           <Nav.Link className="d-flex justify-content-between gap-2 w-full">
             {isLogged ? (
               <Button className="btn-danger" onClick={() => handelLogout()}>
-                Logout
+                LOGOUT
               </Button>
             ) : (
               <>
                 <Button
-                  className="btn-primary"
+                  className="btn btn-light"
                   onClick={() => navigate("/signin")}
                 >
-                  Login
+                  SIGN IN
                 </Button>
                 <Button
-                  className="btn-danger"
+                  className="btn btn-danger"
                   onClick={() => navigate("/register")}
                 >
-                  Register
+                  GET STARTED
                 </Button>
               </>
             )}

@@ -5,6 +5,7 @@ import Home from "./Home/Home";
 import Login from "./Log/Login";
 import Register from "./Log/Register";
 import Verify from "./Log/Verify";
+import Message from "./Message";
 import NavBar from "./Navbar/NavBar";
 import PageNotFound from "./PageNotFound";
 import Search from "./Search";
@@ -28,4 +29,5 @@ export {
   EditProfile,
   AccountSwitch,
   Search,
+  Message,
 };

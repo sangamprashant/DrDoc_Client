@@ -5,13 +5,22 @@ import "./Profile.css";
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import Container from "../Container/Container";
-import { Menu, Tabs } from "antd";
+import { Menu, Rate, Tabs } from "antd";
 import { TableRow } from "./ProfileData";
+import { FrownOutlined, MehOutlined, SmileOutlined } from '@ant-design/icons';
 
 function Profile() {
   const navigate = useNavigate();
   const { isLogged, LoggedUserData } = useContext(AuthContext);
   let userRole = "user";
+
+  const customIcons = {
+    1: <FrownOutlined />,
+    2: <FrownOutlined />,
+    3: <MehOutlined />,
+    4: <SmileOutlined />,
+    5: <SmileOutlined />,
+  };
 
   useEffect(() => {
     if (!isLogged) {
@@ -188,6 +197,8 @@ function Profile() {
             <div className="col-md-8">
               <h4>{LoggedUserData?.personal?.name}</h4>
               <p>{LoggedUserData?.personal?.email}</p>
+              <Rate allowHalf defaultValue={2.5} />
+              <Rate defaultValue={3} character={({ index = 0 }) => customIcons[index + 1]} />
               <div className="d-flex flex-wrap gap-2"></div>
             </div>
           </div>

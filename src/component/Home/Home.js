@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
 import Hero from './Hero'
-import Offer from './Offer'
-import OurApp from './OurApp'
-import Community from './Community'
 import DownloadApp from './DownloadApp'
+import Contact from '../Contact/Contact';
 
 function Home() {
   useEffect(() => {
@@ -12,10 +10,8 @@ function Home() {
   return (
     <>
       <Hero/>
-      <Offer/>
-      <OurApp/>
       <DownloadApp/>
-      <Community/>
+      <Contact/>
     </>
   )
 }

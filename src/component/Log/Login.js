@@ -59,65 +59,66 @@ function Login() {
   };
 
   return (
-    <div
-      className="container row"
-      style={{
-        paddingTop: "70px",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div className="col-md-6">
-        <h1>Welcome Back</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est
-          quibusdam, reiciendis repellat ratione modi tenetur voluptas totam
-          consectetur in labore quo alias dicta! Perferendis obcaecati delectus
-          dignissimos blanditiis quam molestias.
-        </p>
-        <p>Welcome Back</p>
-      </div>
-      <div className="col-md-4">
-        <div
-          className="card p-5 text-white"
-          style={{ backgroundColor: `${theme}` }}
-        >
-          <form onSubmit={handleLogin}>
-            <h1 className="text-white">SignIn</h1>
-            <input
-              type="email"
-              className="form-control mt-3"
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-            />
-            <input
-              type="password"
-              className="form-control mt-3"
-              placeholder="Password"
-              value={password}
-              autoComplete="false"
-              onChange={handlePasswordChange}
-            />
-            <input
-              type="submit"
-              className="form-control mt-3 btn btn-light "
-              value="Sign In"
-            />
-            <hr />
-            <p className="text-center">Login with Face</p>
-            <button 
-              type="button"
-              className="form-control mt-3 btn btn-light text-lg-center"
-            >
-              {Icons.SensorOccupiedIcon}
-            </button>
-          </form>
-          <p>
-            Not having an account? <Link to="/register">Click here</Link>
-          </p>
+    <div className="container">
+      <div
+        className="row justify-content-center align-items-center"
+        style={{
+          paddingTop: "70px",
+          height: "100vh",
+        }}
+      >
+        <div className="col-md-4 ">
+          <div
+            className=" p-5 text-white rounded"
+            style={{ backgroundColor: `${theme}` }}
+          >
+            <form onSubmit={handleLogin}>
+              <h1 className="text-white">Login To Your Account.</h1>
+
+              <div className="d-flex justify-content-center gap-2">
+                <button
+                  type="button"
+                  className=" mt-3 btn btn-light text-lg-center"
+                >
+                  {Icons.SensorOccupiedIcon}
+                </button>
+              </div>
+              <hr />
+              <span className="text-center">
+                Continue with email & password
+              </span>
+              <input
+                type="email"
+                className="form-control mt-3"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+              <input
+                type="password"
+                className="form-control mt-3"
+                placeholder="Password"
+                value={password}
+                autoComplete="false"
+                onChange={handlePasswordChange}
+              />
+              <input
+                type="submit"
+                className="form-control mt-3 btn btn-light "
+                value="Sign In"
+              />
+            </form>
+          </div>
+        </div>
+        <div className="col-md-4">
+          <h1>New to Dr.Doc?</h1>
+          <h5>
+            Rx.Me provides access to high-quality conversations with{" "}
+            <code>physicians</code> and <code>providers</code> in seconds. We work with your health system to develop
+            virtual care solutions and address your company's healthcare
+            challenges.
+          </h5>
+          <Link to="/register" className="btn text-white" style={{backgroundColor:theme}}>GET STARTED</Link>
         </div>
       </div>
     </div>

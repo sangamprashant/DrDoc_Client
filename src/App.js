@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import "component-craftsman/css";
 import {
   AccountSwitch,
   Contact,
@@ -7,6 +8,7 @@ import {
   Footer,
   Home,
   Login,
+  Message,
   NavBar,
   PageNotFound,
   Profile,
@@ -47,13 +49,14 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/signin" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/contact" element={<Contact />} />
-          <Route exact path="/search" element={<Search />} />
+          <Route exact path="/contact" element={<Contact />} /> 
           {/* private */}
+          <Route exact path="/search" element={<Search />} />
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/upload" element={<Upload />} />
           <Route exact path="/edit" element={<EditProfile />} />
           <Route exact path="/accountSwitch" element={<AccountSwitch />} />
+          <Route exact path="/message" element={<Message />} />
 
           <Route exact path="/verify/:token" element={<Verify />} />
           <Route exact path="*" element={<PageNotFound />} />

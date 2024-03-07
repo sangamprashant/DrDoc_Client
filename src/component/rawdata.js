@@ -9,7 +9,7 @@ import {
   mobileDownload,
 } from "../assets";
 
-const theme = "#264653";
+const theme = "#503f9d";
 const HeroData = {
   logoSide: logoSide,
   Heading: {

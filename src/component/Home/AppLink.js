@@ -1,5 +1,5 @@
 import React from "react";
-import { HeroData } from "../rawdata";
+import { HeroData, theme } from "../rawdata";
 
 function AppLink() {
   return (
@@ -15,6 +15,7 @@ function AppLink() {
           <button
             type="submit"
             className="btn btn-primary rounded-5 p-3 px-5 text-nowrap"
+            style={{ backgroundColor: theme }}
           >
             Subscribe
           </button>

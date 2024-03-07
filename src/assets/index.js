@@ -1,14 +1,16 @@
 import logoSide from "./logo.webp";
 import google from "./googlePlay.png";
 import apple from "./appPlay.png";
-import home from "./home.jpg";
+import home from "./home.png";
 import mobileImage from "./mobile.webp";
 import global from "./global.png";
 import building from "./building.jpeg";
-import mobileDownload from "./mobile.jpg";
+import mobileDownload from "./mobile.png";
 import SearchImage from "./search.png";
 import UserImage from "./user.jpeg";
 import UploadImage from "./upload.png";
+
+const DoctorModel = require("./doctormodel.glb")
 
 export {
   logoSide,
@@ -22,4 +24,5 @@ export {
   SearchImage,
   UserImage,
   UploadImage,
+  DoctorModel,
 };
