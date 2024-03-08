@@ -9,8 +9,8 @@ import mobileDownload from "./mobile.png";
 import SearchImage from "./search.png";
 import UserImage from "./user.jpeg";
 import UploadImage from "./upload.png";
+import FootrImage from "./footer.png"
 
-const DoctorModel = require("./doctormodel.glb")
 
 export {
   logoSide,
@@ -24,5 +24,5 @@ export {
   SearchImage,
   UserImage,
   UploadImage,
-  DoctorModel,
+  FootrImage
 };

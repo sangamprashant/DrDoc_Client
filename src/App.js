@@ -3,12 +3,14 @@ import "./App.css";
 import "component-craftsman/css";
 import {
   AccountSwitch,
+  ChangePassword,
   Contact,
   EditProfile,
   Footer,
   Home,
   Login,
   Message,
+  MyDoctor,
   NavBar,
   PageNotFound,
   Profile,
@@ -20,36 +22,65 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "./AuthContext";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchUserData } from "./ApiCalls";
+import { Modal } from "antd";
 
 function App() {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [isLogged, setIsLogged] = useState(token ? true : false);
-  const [LoggedUserData, setLoggedUserData] = useState(null)
+  const [LoggedUserData, setLoggedUserData] = useState(null);
+  // model
+  const [modal2Open, setModal2Open] = React.useState(false);
+  const [modelType, setModelType] = React.useState("error");
+  const [modelMessage, setModelMessgae] = React.useState(null);
+  const getModalColor = () => {
+    switch (modelType) {
+      case "Warning":
+        return "orange";
+      case "Error":
+        return "red";
+      case "Success":
+        return "green";
+      default:
+        return "blue";
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       if (isLogged && token) {
         const userData = await fetchUserData(token);
-        console.log(userData)
+        console.log(userData);
         setLoggedUserData(userData);
       }
     };
-  
+
     fetchData();
   }, [isLogged, token]);
 
   return (
     <BrowserRouter>
-      <AuthContext.Provider value={{ isLogged, setIsLogged, token, setToken, LoggedUserData,setLoggedUserData }}>
+      <AuthContext.Provider
+        value={{
+          isLogged,
+          setIsLogged,
+          token,
+          setToken,
+          LoggedUserData,
+          setLoggedUserData,
+          setModal2Open,
+          setModelType,
+          setModelMessgae,
+        }}
+      >
         <NavBar />
         <Routes>
           {/* public */}
           <Route exact path="/" element={<Home />} />
           <Route exact path="/signin" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/contact" element={<Contact />} /> 
+          <Route exact path="/contact" element={<Contact />} />
           {/* private */}
           <Route exact path="/search" element={<Search />} />
           <Route exact path="/profile" element={<Profile />} />
@@ -57,6 +88,8 @@ function App() {
           <Route exact path="/edit" element={<EditProfile />} />
           <Route exact path="/accountSwitch" element={<AccountSwitch />} />
           <Route exact path="/message" element={<Message />} />
+          <Route exact path="/mydoctor" element={<MyDoctor />} />
+          <Route exact path="/change/password" element={<ChangePassword />} />
 
           <Route exact path="/verify/:token" element={<Verify />} />
           <Route exact path="*" element={<PageNotFound />} />
@@ -64,6 +97,16 @@ function App() {
         <Footer />
       </AuthContext.Provider>
       <ToastContainer theme="dark" />
+      <Modal
+        title={modelType}
+        centered
+        open={modal2Open}
+        onOk={() => setModal2Open(false)}
+        onCancel={() => setModal2Open(false)}
+        style={{ color: getModalColor() }}
+      >
+        {modelMessage}
+      </Modal>
     </BrowserRouter>
   );
 }

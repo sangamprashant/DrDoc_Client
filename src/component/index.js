@@ -2,6 +2,7 @@ import Contact from "./Contact/Contact";
 import Container from "./Container/Container";
 import Footer from "./Footer";
 import Home from "./Home/Home";
+import ChangePassword from "./Log/ChangePassword";
 import Login from "./Log/Login";
 import Register from "./Log/Register";
 import Verify from "./Log/Verify";
@@ -11,6 +12,7 @@ import PageNotFound from "./PageNotFound";
 import Search from "./Search";
 import AccountSwitch from "./User/AccountSwitch";
 import EditProfile from "./User/EditProfile";
+import MyDoctor from "./User/MyDoctor";
 import Profile from "./User/Profile";
 import Upload from "./User/Upload";
 
@@ -30,4 +32,6 @@ export {
   AccountSwitch,
   Search,
   Message,
+  MyDoctor,
+  ChangePassword,
 };

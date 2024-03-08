@@ -149,24 +149,6 @@ const CommunityData = {
     },
   ],
 };
-const ContactInfo = [
-  {
-    title: "Contact Information",
-    content:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet esse quidem laudantium quae",
-  },
-  {
-    title: "Address",
-    content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet",
-    className: "default-text",
-  },
-  { title: "Phone", content: "Lorem ipsum, dolor", className: "default-text" },
-  {
-    title: "Email",
-    content: "Lorem ipsum, dolor sit amet",
-    className: "default-text",
-  },
-];
 const DownloadAppData = {
   image: mobileDownload,
 };
@@ -179,6 +161,5 @@ export {
   OurAppData,
   FooterData,
   CommunityData,
-  ContactInfo,
   DownloadAppData,
 };

@@ -7,7 +7,8 @@ import { AuthContext } from "../../AuthContext";
 import Container from "../Container/Container";
 import { Menu, Rate, Tabs } from "antd";
 import { TableRow } from "./ProfileData";
-import { FrownOutlined, MehOutlined, SmileOutlined } from '@ant-design/icons';
+import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
+import ProfileDocCard from "./reuse/ProfileDocCard";
 
 function Profile() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Profile() {
   };
 
   useEffect(() => {
+    window.scroll(0, 0);
     if (!isLogged) {
       navigate("/");
     }
@@ -39,7 +41,6 @@ function Profile() {
         : "user";
     }
   }, [LoggedUserData]);
-
 
   // Function to count non-empty content values
   const countContentValues = () => {
@@ -61,31 +62,18 @@ function Profile() {
       key: "1",
       label: "Documents & Reports",
       children: (
-        <>
+        <div>
           <div className="document-image-container">
-            <div className="document-image">
-              <img src={UserImage} alt="Profile Pic" />
-            </div>
-            <div className="document-image">
-              <img
-                src="https://github.com/sangamprashant/sangamprashant/raw/main/profile-3d-contrib/profile-green-animate.svg"
-                alt="Profile Pic"
-              />
-            </div>
-            <div className="document-image">
-              <img
-                src="https://camo.githubusercontent.com/59e01572a86734010458d6fb25c2cf8d8dfafab3331af80215e8af07c150192a/68747470733a2f2f63646e2e73616e6974792e696f2f696d616765732f6f726467696b77652f70726f64756374696f6e2f613833306335313832383532653335626364306463303762393031323266303765636431356634382d373030783532352e6769663f773d37303026683d353235266175746f3d666f726d6174"
-                alt="Profile Pic"
-              />
-            </div>
-            <div className="document-image">
-              <img src={UserImage} alt="Profile Pic" />
-            </div>
-            <div className="document-image">
-              <img src={UserImage} alt="Profile Pic" />
-            </div>
+            <ProfileDocCard />
+            <ProfileDocCard />
+            <ProfileDocCard />
+            <ProfileDocCard />
+            <ProfileDocCard />
+            <ProfileDocCard />
+            <ProfileDocCard />
+            <ProfileDocCard />
           </div>
-        </>
+        </div>
       ),
     },
     {
@@ -196,9 +184,15 @@ function Profile() {
             </div>
             <div className="col-md-8">
               <h4>{LoggedUserData?.personal?.name}</h4>
-              <p>{LoggedUserData?.personal?.email}</p>
+              <h5>{LoggedUserData?.personal?.email}</h5>
+              <h5>{LoggedUserData?.personal?.gender}</h5>
+              <h5>{LoggedUserData?.personal?.nationality}</h5>
+              <h5>{LoggedUserData?.personal?.bloodGroup}</h5>
               <Rate allowHalf defaultValue={2.5} />
-              <Rate defaultValue={3} character={({ index = 0 }) => customIcons[index + 1]} />
+              <Rate
+                defaultValue={3}
+                character={({ index = 0 }) => customIcons[index + 1]}
+              />
               <div className="d-flex flex-wrap gap-2"></div>
             </div>
           </div>

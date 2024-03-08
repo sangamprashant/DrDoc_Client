@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FooterData, theme } from "./rawdata";
+import { FootrImage } from "../assets";
 
 function Footer() {
   return (
@@ -45,7 +46,7 @@ function Footer() {
                   <div class="footer-logo">
                     <a href="index.html">
                       <img
-                        src="https://i.ibb.co/QDy827D/ak-logo.png"
+                        src={FootrImage}
                         class="img-fluid"
                         alt="logo"
                       />

@@ -8,11 +8,11 @@ function Home() {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <>
+    <div style={{paddingTop:"70px"}}>
       <Hero/>
       <DownloadApp/>
       <Contact/>
-    </>
+    </div>
   )
 }
 

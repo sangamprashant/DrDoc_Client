@@ -44,17 +44,17 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      if (data.success) {
+      if (data?.success) {
         toast.success("Login successful");
-        sessionStorage.setItem("token", data.token);
-        setToken(data.token);
+        sessionStorage.setItem("token", data?.token);
+        setToken(data?.token);
         setIsLogged(true);
       } else {
         toast.error(data?.message || "Login failed");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toast.error(error.response.data.message || "Something wen wrong");
+      toast.error(error?.response?.data?.message || "Something wen wrong");
     }
   };
 

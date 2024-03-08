@@ -3,7 +3,7 @@ import { Navbar, Nav, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { LogedUserMenuItems, menuItems, theme } from "../rawdata";
 import { AuthContext } from "../../AuthContext";
-import { home } from "../../assets";
+import { FootrImage, home } from "../../assets";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -68,7 +68,9 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
-              <Link class="dropdown-item" to="/message">Messages</Link>
+              <Link class="dropdown-item" to="/message">
+                Messages
+              </Link>
             </li>
             <li>
               <hr class="dropdown-divider" />
@@ -105,7 +107,7 @@ const NavBar = () => {
               <hr class="dropdown-divider" />
             </li>
             <li>
-              <Link class="dropdown-item" to="/upload">
+              <Link class="dropdown-item" to="/change/password">
                 Change Password
               </Link>
             </li>
@@ -130,14 +132,7 @@ const NavBar = () => {
             navigate("/");
           }}
         >
-          <img
-            src={home}
-            alt=""
-            width="40"
-            height="40"
-            className="rounded-circle me-2"
-          />
-          DrDoc
+          <img src={FootrImage} alt="" height="40" className="me-2" />
         </Navbar.Brand>
         {expanded && (
           <Navbar.Toggle
@@ -151,10 +146,13 @@ const NavBar = () => {
           onSelect={closeNavbar}
         >
           <Nav className="mr-auto">
-          <li className="nav-item">
-            <Link className="nav-link" to="/contact">Contact</Link>
-          </li>
-          {isLogged && UserOptions()}</Nav>
+            <li className="nav-item">
+              <Link className="nav-link" to="/contact">
+                Contact
+              </Link>
+            </li>
+            {isLogged && UserOptions()}
+          </Nav>
         </Navbar.Collapse>
         <Nav>
           <Nav.Link className="d-flex justify-content-between gap-2 w-full">
