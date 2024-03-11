@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useHistory to redirect after successful login
 import { theme } from "../rawdata";
 import { toast } from "react-toastify";
-import Modal from "react-modal";
+import { Button, Modal } from 'antd';
 import { AuthContext } from "../../AuthContext";
 
 function Register() {
@@ -15,6 +15,7 @@ function Register() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal2Open, setModal2Open] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function Register() {
   useEffect(() => {
     if (isLogged) {
       navigate("/");
-    }
+    }  
   }, [isLogged]);
 
   const handleInputChange = (e) => {
@@ -46,7 +47,7 @@ function Register() {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_DATABASE_API}/common/register`,
+        `${process.env.REACT_APP_PYTHON_SERVER_API}/register`,
         {
           method: "POST",
           headers: {
@@ -58,7 +59,7 @@ function Register() {
       const data = await response.json();
       if (data.success) {
         toast.success(data?.message);
-        setIsModalOpen(true);
+
         sessionStorage.setItem("token", data.token);
         setToken(data.token);
         setIsLogged(true);
@@ -129,10 +130,11 @@ function Register() {
                 required
               />
               <input
-                type="submit"
+                type="button"
                 className="form-control mt-3 btn btn-light"
                 value={loading ? "Please wait.." : "GET STARTED"}
                 disabled={loading}
+                onClick={()=>setModal2Open(true)}
               />
             </form>
             {error && <p className="text-white">{error}</p>}
@@ -152,6 +154,29 @@ function Register() {
             </p>
         </div>
       </div>
+      <Modal
+        title={""}
+        centered
+        open={modal2Open}
+        onOk={() => setModal2Open(false)}
+        onCancel={() => setModal2Open(false)}
+        footer={[
+          <button key="submit" className="btn btn-primary m-1" loading={loading} onClick={{}}>
+            CAPTURE
+          </button>,
+          <button key="submit" className="btn btn-warning m-1" loading={loading} onClick={{}}>
+            RETAKE
+          </button>,
+          <button key="submit" className="btn btn-success m-1" loading={loading} onClick={{}}>
+            ENROLE
+          </button>,
+          <button key="submit" className="btn btn-danger m-1" loading={loading} onClick={{}}>
+            CANCEL
+          </button>,
+        ]}
+      >
+        <p>helo</p>
+      </Modal>
     </div>
   );
 }
