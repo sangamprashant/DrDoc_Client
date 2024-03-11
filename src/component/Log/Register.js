@@ -2,20 +2,29 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useHistory to redirect after successful login
 import { theme } from "../rawdata";
 import { toast } from "react-toastify";
-import { Button, Modal } from 'antd';
+// import { Button, Modal } from "antd";
+import html2canvas from "html2canvas";
 import { AuthContext } from "../../AuthContext";
+import Modal from "../Reuse/Modal/Modal";
+import axios from "axios";
 
 function Register() {
-  const { setToken, isLogged, setIsLogged } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState(null);
+  const {
+    setToken,
+    isLogged,
+    setIsLogged,
+    setModal2Open,
+    setModelType,
+    setModelMessgae,
+  } = useContext(AuthContext);
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modal2Open, setModal2Open] = useState(false);
+  const videoRef = React.useRef(null);
+  const [capturedImage, setCapturedImage] = React.useState();
+  const [imgeBlob, setImageBlob] = React.useState(null);
+  const [modelRegister, setModelRegister] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,87 +34,136 @@ function Register() {
   useEffect(() => {
     if (isLogged) {
       navigate("/");
-    }  
+    }
   }, [isLogged]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (
-      !formData.name.trim() ||
-      !formData.email.trim() ||
-      !formData.password.trim()
-    ) {
-      return toast.info("All fields are required.");
+  useEffect(() => {
+    if (modelRegister) {
+      startWebcam();
     }
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_PYTHON_SERVER_API}/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-      const data = await response.json();
-      if (data.success) {
-        toast.success(data?.message);
+  }, [capturedImage, modelRegister]);
 
-        sessionStorage.setItem("token", data.token);
-        setToken(data.token);
-        setIsLogged(true);
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-        });
-      } else {
-        setError(data?.message || "Registration failed");
-        toast.error(data?.message);
+  const startWebcam = async () => {
+    try {
+      // Access the webcam stream
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      if (videoRef.current) {
+        // Set the stream as the video source
+        videoRef.current.srcObject = stream;
       }
     } catch (error) {
-      console.error("Error during registration:", error);
-      setError("Internal server error");
-      toast.error(error?.response?.data?.message || "Somethimg weng wrong");
-    } finally {
-      setLoading(false);
+      console.error("Error accessing webcam:", error);
     }
   };
+  // for web cam
+  const HandleWebCam = () => {
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setModelType("Warning");
+      setModelMessgae("Please enter in all the fields");
+      setModal2Open(true);
+      return;
+    }
+    setModelRegister(true);
+    // Function to start the webcam
+    startWebcam(); // Start the webcam when the component mounts
+    // Cleanup function to stop the webcam when the component unmounts
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+      }
+    };
+  };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const handleScreenshotButtonClick = () => {
+    html2canvas(document.getElementById("screenshot-target")).then((canvas) => {
+      // Convert canvas to blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          // Display captured image
+          const capturedImageUrl = URL.createObjectURL(blob);
+          setCapturedImage(capturedImageUrl);
+          // Send image to server
+          setImageBlob(blob);
+        } else {
+          console.error("Failed to convert canvas to blob");
+        }
+      }, "image/jpeg"); // Specify MIME type
+    });
+  };
+
+  const handleRetake = () => {
+    setCapturedImage(null);
+  };
+
+  const handleRegister = async () => {
+    setLoading(true);
+    setModelRegister(false);
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("name", name);
+      formData.append("password", password);
+      formData.append("face_photo", imgeBlob, "screenshot.jpg");
+
+      console.log("form send: ", formData);
+
+      const response = await fetch("http://127.0.0.1:8000/api/register", {
+        method: "POST",
+        body: formData,
+      });
+
+      const responseData = await response.json();
+      console.log("response:", responseData);
+
+      console.log(responseData);
+
+      if (responseData.success) {
+        setModelType("Success");
+        setModelMessgae("Registered successfully");
+        setModal2Open(true);
+        setEmail("");
+        setName("");
+        setPassword("");
+      } else {
+        throw new Error(responseData.error || "Something went wrong");
+      }
+    } catch (error) {
+      console.error("Failed to register:", error);
+      setModelType("Error");
+      setModelMessgae(error.message || "Something went wrong");
+      setModal2Open(true);
+    } finally {
+      setLoading(false);
+      setCapturedImage(null);
+      setImageBlob(null)
+    }
   };
 
   return (
-    <div
-      className="container"
-
-    >
-      <div className="row"       style={{
-        paddingTop: "70px",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}>
+    <div className="container">
+      <div
+        className="row"
+        style={{
+          paddingTop: "70px",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div className="col-md-4">
           <div className="card p-5" style={{ backgroundColor: `${theme}` }}>
-            <form onSubmit={handleRegister}>
+            <form>
               <h1 className="text-white">Welcome to DrDoc</h1>
               <input
                 type="text"
                 name="name"
-                value={formData.name}
-                onChange={handleInputChange}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="form-control mt-3"
                 placeholder="Name"
                 required
@@ -113,8 +171,8 @@ function Register() {
               <input
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="form-control mt-3"
                 placeholder="Email"
                 required
@@ -123,8 +181,8 @@ function Register() {
                 type="password"
                 name="password"
                 autoComplete="false"
-                value={formData.password}
-                onChange={handleInputChange}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="form-control mt-3"
                 placeholder="Password"
                 required
@@ -134,11 +192,9 @@ function Register() {
                 className="form-control mt-3 btn btn-light"
                 value={loading ? "Please wait.." : "GET STARTED"}
                 disabled={loading}
-                onClick={()=>setModal2Open(true)}
+                onClick={HandleWebCam}
               />
             </form>
-            {error && <p className="text-white">{error}</p>}
-          
           </div>
         </div>
         <div className="col-md-4">
@@ -150,32 +206,62 @@ function Register() {
           </h5>
           <hr />
           <p className="text-muted">
-              Already have an account? <br /> <Link to="/signin" className="btn text-white" style={{backgroundColor:theme}}>Continue LogIn</Link>
-            </p>
+            Already have an account? <br />{" "}
+            <Link
+              to="/signin"
+              className="btn text-white"
+              style={{ backgroundColor: theme }}
+            >
+              Continue LogIn
+            </Link>
+          </p>
         </div>
       </div>
-      <Modal
-        title={""}
-        centered
-        open={modal2Open}
-        onOk={() => setModal2Open(false)}
-        onCancel={() => setModal2Open(false)}
-        footer={[
-          <button key="submit" className="btn btn-primary m-1" loading={loading} onClick={{}}>
-            CAPTURE
-          </button>,
-          <button key="submit" className="btn btn-warning m-1" loading={loading} onClick={{}}>
-            RETAKE
-          </button>,
-          <button key="submit" className="btn btn-success m-1" loading={loading} onClick={{}}>
-            ENROLE
-          </button>,
-          <button key="submit" className="btn btn-danger m-1" loading={loading} onClick={{}}>
-            CANCEL
-          </button>,
-        ]}
-      >
-        <p>helo</p>
+      <Modal isOpen={modelRegister} onClose={() => setModelRegister(false)}>
+        <>
+          <h2>Webcam Scanner</h2>
+          {capturedImage ? (
+            <img src={capturedImage} alt="" />
+          ) : (
+            <video ref={videoRef} autoPlay playsInline id="screenshot-target" />
+          )}
+          <div className="d-flex justify-content-around mt-2">
+            <button
+              key="1"
+              className="btn btn-primary m-1"
+              onClick={handleScreenshotButtonClick}
+              disabled={!capturedImage ? false : true}
+            >
+              CAPTURE
+            </button>
+
+            <button
+              key="2"
+              className="btn btn-warning m-1 text-white"
+              disabled={capturedImage ? false : true}
+              onClick={handleRetake}
+            >
+              RETAKE
+            </button>
+
+            <button
+              key="3"
+              className="btn btn-success m-1"
+              onClick={handleRegister}
+              disabled={capturedImage ? false : true}
+            >
+              ENROLE
+            </button>
+
+            <button
+              key="4"
+              className="btn btn-danger m-1"
+              onClick={() => setModelRegister(false)}
+            >
+              CANCEL
+            </button>
+          </div>
+        </>
       </Modal>
     </div>
   );
