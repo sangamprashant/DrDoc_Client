@@ -32,15 +32,6 @@ function AccountSwitch() {
     e.preventDefault();
     let isValid = true;
 
-    if (
-      !userData?.bank?.bankAccount ||
-      !userData?.bank?.accountHolderName ||
-      !userData?.bank?.ifcCode ||
-      !userData?.bank?.branch
-    ) {
-      return toast.warning("Bank details are missing.");
-    }
-
     if (query === "doctor") {
       const doctorFields = [
         "hospitalName",
@@ -100,12 +91,6 @@ function AccountSwitch() {
     <Container>
       <Heading title={`Apply for ${query}`} />
       <hr />
-      <BankEditForm
-        userData={userData}
-        setUserData={setUserData}
-        loading={loading}
-        setLoading={setLoading}
-      />
       {query === "doctor" && (
         <DoctorEditForm
           userData={userData}

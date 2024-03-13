@@ -175,7 +175,7 @@ function Profile() {
           <div className="profile-section row">
             <div className="col-md-4 d-flex justify-content-center">
               <img
-                src={UserImage}
+                src={LoggedUserData?.personal?.image || UserImage}
                 alt="Profile Pic"
                 width={200}
                 height={200}
@@ -183,8 +183,8 @@ function Profile() {
               />
             </div>
             <div className="col-md-8">
-              <h4>{LoggedUserData?.personal?.name}</h4>
-              <h5>{LoggedUserData?.personal?.email}</h5>
+              <h4>{LoggedUserData?.name}</h4>
+              <h5>{LoggedUserData?.email}</h5>
               <h5>{LoggedUserData?.personal?.gender}</h5>
               <h5>{LoggedUserData?.personal?.nationality}</h5>
               <h5>{LoggedUserData?.personal?.bloodGroup}</h5>

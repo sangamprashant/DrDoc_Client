@@ -7,7 +7,6 @@ import { BASE_API } from "../../config";
 import { toast } from "react-toastify";
 import {
   AddressEditForm,
-  BankEditForm,
   DoctorEditForm,
   PersonalEditForm,
 } from "./reuse/EditProfileForms";
@@ -53,9 +52,8 @@ function EditProfile() {
       <Heading title="Edit profile" />
       <hr />
       <form onSubmit={handleUpdate}>
-        <PersonalEditForm userData={userData} setUserData={setUserData} />
+        <PersonalEditForm userData={userData} setUserData={setUserData} setIsLoading={setIsLoading}/>
         <AddressEditForm userData={userData} setUserData={setUserData} />
-        {!LoggedUserData?.isUser && <BankEditForm userData={userData} setUserData={setUserData} />}
         {LoggedUserData?.isDoctor && <DoctorEditForm userData={userData} setUserData={setUserData} />}
         {LoggedUserData?.isDelivery && <DeliveryEditForm userData={userData} setUserData={setUserData}/>}
         {LoggedUserData?.isSeller && <SellerEditForm userData={userData} setUserData={setUserData}/>}

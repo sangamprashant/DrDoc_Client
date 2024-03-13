@@ -1,43 +1,44 @@
 import React from "react";
-
-import { InboxOutlined } from "@ant-design/icons";
-import { message, Upload } from "antd";
+import { storage } from "../../../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserImage } from "../../../../assets";
-const { Dragger } = Upload;
-const props = {
-  name: "file",
-  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
 
-function PersonalEditForm({ userData, setUserData }) {
+function PersonalEditForm({ userData, setUserData, setIsLoading }) {
   const [selectImage, setSelectedImage] = React.useState(null);
   const [previewImage, setPreviewImage] = React.useState(null);
 
-  // Function to handle image selection
-  const handleImageChange = (info) => {
-    if (info.file.status === "done") {
-      setSelectedImage(info.file.originFileObj);
-      // Display image preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewImage(e.target.result);
-      };
-      reader.readAsDataURL(info.file.originFileObj);
-    }
+  const handleImageChange = (e) => {
+    const imageFile = e.target.files[0]; // Get the file directly from the event
+    setSelectedImage(imageFile);
+    console.log(e)
+    // Display image preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreviewImage(e.target.result);
+    };
+    reader.readAsDataURL(imageFile);
+    uploadImage(imageFile); // Pass the file to uploadImage
+  };
+
+  const uploadImage = (selectImage) => {
+    setIsLoading(true);
+    const fileRef = ref(storage, `drdoc/${Date.now() + selectImage.name}`);
+    
+    // Upload the image to Firebase Storage
+    uploadBytes(fileRef, selectImage).then((snapshot) => {
+      // Get the download URL of the uploaded image
+      getDownloadURL(snapshot.ref).then((url) => {
+        // Update user data with the image URL
+        setUserData((prev) => ({
+          ...prev,
+          personal: {
+            ...prev.personal,
+            image: url, // Set the image URL here
+          },
+        }));
+        setIsLoading(false);
+      });
+    });
   };
 
   const handlePersonalInput = (e) => {
@@ -54,35 +55,6 @@ function PersonalEditForm({ userData, setUserData }) {
     <>
       <h4>Personal Information </h4>
       <div className="row mb-4">
-        <div className="col-md-6">
-          <label htmlFor="name"  className="form-label">
-            Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            required
-            placeholder="Enter your name"
-            value={userData?.personal?.name}
-            onChange={handlePersonalInput}
-          />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            value={userData?.personal?.email}
-            onChange={handlePersonalInput}
-          />
-        </div>
         <div className="col-md-6">
           <label htmlFor="dateOfBirth" className="form-label">
             Date of Birth
@@ -186,19 +158,8 @@ function PersonalEditForm({ userData, setUserData }) {
         <div className="col-md-6">
           <label htmlFor="image" className="form-label">
             Profile picture
-          </label>
-          <Dragger {...props} onChange={handleImageChange} accept="image/*">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
-            <p className="ant-upload-hint">
-              Support for a single or bulk upload. Strictly prohibited from
-              uploading company data or other banned files.
-            </p>
-          </Dragger>
+          </label> <br />
+          <input type="file"  onChange={handleImageChange} accept="image/*"/>
         </div>
         <div className="col-md-6">
           <label htmlFor="image" className="form-label">
@@ -221,7 +182,7 @@ function PersonalEditForm({ userData, setUserData }) {
             <div className="d-flex flex-column">
               <span>Previous image</span>
               <img
-                src={UserImage}
+                src={userData?.personal?.image || UserImage}
                 alt="Profile Preview"
                 style={{ maxWidth: "150px", height: "150px" }}
                 className=" object-fit-cover"
