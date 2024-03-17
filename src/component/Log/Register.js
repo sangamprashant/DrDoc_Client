@@ -23,7 +23,6 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const videoRef = React.useRef(null);
   const [capturedImage, setCapturedImage] = React.useState();
-  const [imgeBlob, setImageBlob] = React.useState(null);
   const [modelRegister, setModelRegister] = useState(false);
   const navigate = useNavigate();
 
@@ -87,7 +86,7 @@ function Register() {
           const capturedImageUrl = URL.createObjectURL(blob);
           setCapturedImage(capturedImageUrl);
           // Send image to server
-          setImageBlob(blob);
+          handleRegister(blob)
         } else {
           console.error("Failed to convert canvas to blob");
         }
@@ -99,7 +98,7 @@ function Register() {
     setCapturedImage(null);
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (imgeBlob) => {
     setLoading(true);
     setModelRegister(false);
     try {
@@ -139,7 +138,6 @@ function Register() {
     } finally {
       setLoading(false);
       setCapturedImage(null);
-      setImageBlob(null)
     }
   };
 
@@ -221,34 +219,15 @@ function Register() {
         <>
           <h2>Webcam Scanner</h2>
           {capturedImage ? (
-            <img src={capturedImage} alt="" />
+            <img src={capturedImage} alt="" width={400} />
           ) : (
-            <video ref={videoRef} autoPlay playsInline id="screenshot-target" />
+            <video ref={videoRef} autoPlay playsInline id="screenshot-target" width={400}/>
           )}
           <div className="d-flex justify-content-around mt-2">
             <button
-              key="1"
-              className="btn btn-primary m-1"
-              onClick={handleScreenshotButtonClick}
-              disabled={!capturedImage ? false : true}
-            >
-              CAPTURE
-            </button>
-
-            <button
-              key="2"
-              className="btn btn-warning m-1 text-white"
-              disabled={capturedImage ? false : true}
-              onClick={handleRetake}
-            >
-              RETAKE
-            </button>
-
-            <button
               key="3"
               className="btn btn-success m-1"
-              onClick={handleRegister}
-              disabled={capturedImage ? false : true}
+              onClick={handleScreenshotButtonClick}
             >
               ENROLE
             </button>

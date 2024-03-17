@@ -5,15 +5,20 @@ import "./Profile.css";
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import Container from "../Container/Container";
-import { Menu, Rate, Tabs } from "antd";
+import { Image, Menu, Modal, Rate, Tabs } from "antd";
 import { TableRow } from "./ProfileData";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import ProfileDocCard from "./reuse/ProfileDocCard";
+import axios from "axios";
 
 function Profile() {
   const navigate = useNavigate();
-  const { isLogged, LoggedUserData } = useContext(AuthContext);
+  const { isLogged, LoggedUserData, token } = useContext(AuthContext);
   let userRole = "user";
+  const [prescriptions, setPrescriptions] = React.useState([]);
+  // modal
+  const [modal2Open, setModal2Open] = React.useState(false);
+  const [openPrescription, setOpenPrescription] = React.useState(null);
 
   const customIcons = {
     1: <FrownOutlined />,
@@ -29,6 +34,30 @@ function Profile() {
       navigate("/");
     }
   }, [isLogged, navigate]);
+
+  React.useEffect(() => {
+    fetchPrescription();
+  }, [token]);
+
+  const fetchPrescription = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_DATABASE_API}/user/post/get`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setPrescriptions(response.data.prescriptions);
+      } else {
+        console.log("Request failed:", response.data.message);
+      }
+    } catch (error) {
+      console.log("Failed to fetch:", error);
+    }
+  };
 
   useEffect(() => {
     if (LoggedUserData) {
@@ -57,6 +86,11 @@ function Profile() {
     console.log("Number of content values:", countContentValues());
   }, [LoggedUserData]);
 
+  const handleClick = (data) => {
+    setOpenPrescription(data);
+    setModal2Open(true);
+  };
+
   const items = [
     {
       key: "1",
@@ -64,14 +98,18 @@ function Profile() {
       children: (
         <div>
           <div className="document-image-container">
-            <ProfileDocCard />
-            <ProfileDocCard />
-            <ProfileDocCard />
-            <ProfileDocCard />
-            <ProfileDocCard />
-            <ProfileDocCard />
-            <ProfileDocCard />
-            <ProfileDocCard />
+            {prescriptions.map((data, index) => (
+              <ProfileDocCard
+                key={index}
+                image={data.images[0]}
+                title={data.title}
+                date={data.date}
+                description={data.description}
+                handleClick={() => {
+                  handleClick(data);
+                }}
+              />
+            ))}
           </div>
         </div>
       ),
@@ -200,6 +238,31 @@ function Profile() {
         </Container>
       ) : (
         <div className="spinner-border" role="status"></div>
+      )}
+      {openPrescription && (
+        <Modal
+          title=<h5>{openPrescription.title}</h5>
+          centered
+          open={modal2Open}
+          onOk={() => setModal2Open(false)}
+          onCancel={() => setModal2Open(false)}
+        >
+          {openPrescription.description&& <><code>Description: {openPrescription.description}</code><br /></>}
+          {openPrescription.additionalNotes&&<><code>Additional notes: {openPrescription.additionalNotes}</code><br /></>}
+          {openPrescription.date&&<><code>Date: {openPrescription.date}</code><br /></>}
+          {openPrescription.doctorName&&<><code>Doctor Name: {openPrescription.doctorName}</code><br /></>}
+          <div className="d-flex flex-wrap">
+            {openPrescription?.images.map((data, index) => (
+              <Image
+                key={index}
+                src={data}
+                height={150}
+                width={150}
+                className=" object-fit-contain"
+              />
+            ))}
+          </div>
+        </Modal>
       )}
     </>
   );

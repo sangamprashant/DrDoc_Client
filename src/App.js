@@ -19,7 +19,7 @@ import {
   Upload,
   Verify,
 } from "./component";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "./AuthContext";
 import React, { useEffect, useState } from "react";
@@ -47,11 +47,10 @@ function App() {
     }
   };
 
-  useEffect(() => {
+  React.useLayoutEffect(() => {
     const fetchData = async () => {
       if (isLogged && token) {
         const userData = await fetchUserData(token);
-        console.log(userData);
         setLoggedUserData(userData);
       }
     };

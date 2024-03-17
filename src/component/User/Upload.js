@@ -4,6 +4,11 @@ import Heading from "./reuse/Heading";
 import { theme } from "../rawdata";
 import Modal from "../Reuse/Modal/Modal";
 import html2canvas from "html2canvas";
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Image } from "antd";
+import { AuthContext } from "../../AuthContext";
+import axios from "axios";
 
 // Get current date in the format yyyy-mm-dd
 const getCurrentDate = () => {
@@ -15,6 +20,8 @@ const getCurrentDate = () => {
 };
 
 function Upload() {
+  const { token, setModal2Open, setModelType, setModelMessgae } =
+    React.useContext(AuthContext);
   // form inputs
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,14 +40,24 @@ function Upload() {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleFileUpload = (event) => {
-    const files = event.target.files;
-    const urls = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      urls.push(URL.createObjectURL(file));
+  const handleFileUpload = async (event) => {
+    try {
+      const files = event.target.files;
+      setLoading(true);
+      const urls = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileRef = ref(storage, `DrDoc_college/${Date.now() + file.name}`);
+        const snapshot = await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+        urls.push(url);
+      }
+      setSelectedImages((prev) => [...prev, ...urls]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      setLoading(false);
     }
-    setSelectedImages(urls);
   };
 
   const handleRetake = () => {
@@ -52,16 +69,74 @@ function Upload() {
       // Convert canvas to blob
       canvas.toBlob((blob) => {
         if (blob) {
-          // Display captured image
           const capturedImageUrl = URL.createObjectURL(blob);
           setCapturedImage(capturedImageUrl);
-          // Send image to server
           setImageBlob(blob);
         } else {
           console.error("Failed to convert canvas to blob");
         }
       }, "image/jpeg"); // Specify MIME type
     });
+  };
+
+  const sendImageToServer = async (blob) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", blob, Math.random() + "screenshot.jpg"); // Change key to "file"
+      const response = await fetch(
+        `${process.env.REACT_APP_PYTHON_SERVER_API}/scan`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {
+        uploadImageFromURL(
+          `${process.env.REACT_APP_PYTHON_SERVER_API}/`,
+          data.result_path
+        );
+      }
+    } catch (error) {
+      console.log("Failed to scan the document:", error);
+      alert("server error");
+    }
+  };
+
+  // Function to upload image from URL to Firebase Storage
+  const uploadImageFromURL = async (base, imageUrl) => {
+    try {
+      const response = await fetch(base + imageUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch image data");
+      }
+      const imageBlob = await response.blob();
+      const storageRef = ref(storage, "DrDoc_college/" + Date.now() + ".jpg");
+      const snapshot = await uploadBytes(storageRef, imageBlob);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setSelectedImages((prevImages) => [...prevImages, downloadURL]);
+      deleteImage(base, imageUrl);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const deleteImage = async (base, filename) => {
+    try {
+      const response = await fetch(`${base}delete-image/${filename}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        console.log("Image deleted successfully");
+        setCapturedImage(null);
+      } else {
+        console.error("Failed to delete image:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
   };
 
   React.useEffect(() => {
@@ -96,6 +171,53 @@ function Upload() {
         tracks.forEach((track) => track.stop());
       }
     };
+  };
+
+  // handle  the image upload to the firebasenget link then save to express server
+  const handleSaveToDatabase = async () => {
+    if (!title.trim() || !description.trim() || !date || !selectedImages > 0) {
+      setModal2Open(true);
+      setModelType("Error");
+      setModelMessgae("Title, description, images, and date are required");
+      return;
+    }
+    const data = {
+      title: title.trim(),
+      description: description.trim(),
+      date,
+      doctorName,
+      additionalNotes,
+      images: selectedImages,
+    };
+
+    try {
+      // Send data to the Express server
+      const response = await axios.post(
+        `${process.env.REACT_APP_DATABASE_API}/user/post/create`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setModal2Open(true);
+        setModelType("Success");
+        setModelMessgae(response.data.message || "Uploaded prescription");
+      } else {
+        setModal2Open(true);
+        setModelType("Warning");
+        setModelMessgae(response.data.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error saving prescription:", error);
+      setModal2Open(true);
+      setModelType("Error");
+      setModelMessgae(
+        error.response.data.message || "Error saving prescription"
+      );
+    }
   };
 
   return (
@@ -147,7 +269,7 @@ function Upload() {
             className="form-control"
             id="date"
             value={date}
-            max={getCurrentDate()} // Set max attribute to current date
+            max={getCurrentDate()}
             onChange={(e) => setDate(e.target.value)}
           />
         </div>
@@ -201,29 +323,40 @@ function Upload() {
           <label htmlFor="selectedImages">Selected Reports Preview</label>
           <div className="selected-images-container d-flex flex-wrap gap-2 ">
             {selectedImages.map((imageUrl, index) => (
-              <img
+              <Image
                 key={index}
-                src={imageUrl}
                 alt={`selected-image-${index} `}
                 width={150}
                 height={150}
                 className=" object-fit-contain"
+                src={imageUrl}
               />
             ))}
           </div>
         </div>
         <div className="d-flex justify-content-end">
-          <button className="btn text-white" style={{ backgroundColor: theme }}>
-            UPLOAD
+          <button
+            className="btn text-white"
+            style={{ backgroundColor: theme }}
+            onClick={handleSaveToDatabase}
+            disabled={loading}
+          >
+            {loading ? "PLEASE WAIT" : "UPLOAD"}
           </button>
         </div>
       </div>
       <Modal isOpen={isScannerOpen}>
         <h1>Document scanner</h1>
         {capturedImage ? (
-          <img src={capturedImage} alt="" />
+          <img src={capturedImage} alt="" width={400} />
         ) : (
-          <video ref={videoRef} autoPlay playsInline id="screenshot-target" />
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            id="screenshot-target"
+            width={400}
+          />
         )}
         <div className="d-flex justify-content-around mt-2">
           <button
@@ -246,7 +379,7 @@ function Upload() {
           <button
             key="3"
             className="btn btn-success m-1"
-            onClick={{}}
+            onClick={() => sendImageToServer(imgeBlob)}
             disabled={capturedImage ? false : true}
           >
             SCAN
@@ -254,7 +387,10 @@ function Upload() {
           <button
             key="4"
             className="btn btn-danger m-1"
-            onClick={() => setScannerOpen(false)}
+            onClick={() => {
+              setScannerOpen(false);
+              setCapturedImage(null);
+            }}
           >
             CANCEL
           </button>
