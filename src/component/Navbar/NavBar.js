@@ -98,11 +98,11 @@ const NavBar = () => {
                 Apply for Doctor
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link class="dropdown-item" to="/accountSwitch?query=user">
                 Apply for User
               </Link>
-            </li>
+            </li> */}
             <li>
               <hr class="dropdown-divider" />
             </li>

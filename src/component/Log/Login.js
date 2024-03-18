@@ -133,10 +133,6 @@ function Login() {
       });
 
       const responseData = await response.json();
-      console.log("response:", responseData);
-
-      console.log(responseData);
-
       if (responseData.success) {
         setModelType("Success");
         setModelMessgae(responseData.message);
@@ -185,30 +181,29 @@ function Login() {
                   {Icons.SensorOccupiedIcon}
                 </button>
               </div>
-              <hr />
-              <span className="text-center">
-                Continue with email & password
-              </span>
-              <input
-                type="email"
-                className="form-control mt-3"
-                placeholder="Email"
-                value={email}
-                onChange={handleEmailChange}
-              />
-              <input
-                type="password"
-                className="form-control mt-3"
-                placeholder="Password"
-                value={password}
-                autoComplete="false"
-                onChange={handlePasswordChange}
-              />
-              <input
-                type="submit"
-                className="form-control mt-3 btn btn-light "
-                value="Sign In"
-              />
+              <details className="mt-3">
+                <summary>Continue with email & password</summary>
+                <input
+                  type="email"
+                  className="form-control mt-3"
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+                <input
+                  type="password"
+                  className="form-control mt-3"
+                  placeholder="Password"
+                  value={password}
+                  autoComplete="false"
+                  onChange={handlePasswordChange}
+                />
+                <input
+                  type="submit"
+                  className="form-control mt-3 btn btn-light "
+                  value="Sign In"
+                />
+              </details>
             </form>
           </div>
         </div>
@@ -233,12 +228,17 @@ function Login() {
         <>
           <h2>Webcam Scanner</h2>
           {capturedImage ? (
-            <img src={capturedImage} alt=""  width={400} />
+            <img src={capturedImage} alt="" width={400} />
           ) : (
-            <video ref={videoRef} autoPlay playsInline id="screenshot-target"  width={400}/>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              id="screenshot-target"
+              width={400}
+            />
           )}
           <div className="d-flex justify-content-around mt-2">
-
             <button
               key="3"
               className="btn btn-success m-1"

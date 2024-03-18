@@ -51,6 +51,13 @@ function App() {
     const fetchData = async () => {
       if (isLogged && token) {
         const userData = await fetchUserData(token);
+        if (userData.isDoctor) {
+          sessionStorage.clear();
+          setModelType ("Warning");
+          setModelMessgae("Only users are allowed lo login.");
+          setModal2Open(true);
+          setIsLogged(false);
+        }
         setLoggedUserData(userData);
       }
     };
