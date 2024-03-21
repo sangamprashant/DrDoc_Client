@@ -1,5 +1,7 @@
 import React from "react";
 import "./Search.css";
+import { Loading } from "component-craftsman";
+import { AuthContext } from "../../AuthContext";
 
 // Sample data array
 const doctorsData = [
@@ -21,51 +23,89 @@ const doctorsData = [
 ];
 
 const Search = () => {
+  const [isData, setIsData] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [searchKey, setSearchKey] = React.useState("");
+  const { setModal2Open, setModelType, setModelMessgae } =
+    React.useContext(AuthContext);
+
+  const handleSeatrchKey = (e) => {
+    setSearchKey(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!searchKey.trim()) {
+      setModelType("Error");
+      setModelMessgae("Search field is empty! write correct term to search");
+      setModal2Open(true);
+      return;
+    }
+    setLoading(true);
+  };
+
   return (
     <section>
       <div className="search">
         <div className="searchmain">
           <div className="search-input-container">
-            <form className="form-wrapper cf">
-              <input type="text" placeholder="Search here..." required />
+            <form className="form-wrapper cf" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Search here..."
+                value={searchKey}
+                onChange={handleSeatrchKey}
+              />
               <button type="submit">Search</button>
             </form>
           </div>
         </div>
-        <div className="container">
-          <hr />
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Details</th>
-                <th>Doctor Specification</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Map through the data array */}
-              {doctorsData.map((doctor) => (
-                <tr key={doctor.id}>
-                  <td>
-                    {/* Render doctor's image */}
-                    <img src={doctor.imageSrc} alt={doctor.name} height={100} width={100} />
-                  </td>
-                  <td>
-                    {/* Render doctor's details */}
-                    <div>
-                      <span>{doctor.email}</span> <br />
-                      <span>{doctor.name}</span>
-                    </div>
-                  </td>
-                  <td>
-                    {/* Render doctor's specialization */}
-                    {doctor.specialization}
-                  </td>
+        {loading && (
+          <div className="d-flex justify-content-center">
+            <Loading label="loading" loading={4} />
+          </div>
+        )}
+        {isData && (
+          <div className="container">
+            <hr />
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Details</th>
+                  <th>Doctor Specification</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {/* Map through the data array */}
+                {doctorsData.map((doctor) => (
+                  <tr key={doctor.id}>
+                    <td>
+                      {/* Render doctor's image */}
+                      <img
+                        src={doctor.imageSrc}
+                        alt={doctor.name}
+                        height={100}
+                        width={100}
+                      />
+                    </td>
+                    <td>
+                      {/* Render doctor's details */}
+                      <div>
+                        <span>{doctor.email}</span> <br />
+                        <span>{doctor.name}</span>
+                      </div>
+                    </td>
+                    <td>
+                      {/* Render doctor's specialization */}
+                      {doctor.specialization}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   );
