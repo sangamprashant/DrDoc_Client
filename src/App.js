@@ -5,6 +5,7 @@ import {
   AccountSwitch,
   ChangePassword,
   Contact,
+  DoctorProfile,
   EditProfile,
   Footer,
   Home,
@@ -53,7 +54,7 @@ function App() {
         const userData = await fetchUserData(token);
         if (userData.isDoctor) {
           sessionStorage.clear();
-          setModelType ("Warning");
+          setModelType("Warning");
           setModelMessgae("Only users are allowed lo login.");
           setModal2Open(true);
           setIsLogged(false);
@@ -96,6 +97,7 @@ function App() {
           <Route exact path="/message" element={<Message />} />
           <Route exact path="/mydoctor" element={<MyDoctor />} />
           <Route exact path="/change/password" element={<ChangePassword />} />
+          <Route exact path="/doctor/:id" element={<DoctorProfile />} />
 
           <Route exact path="/verify/:token" element={<Verify />} />
           <Route exact path="*" element={<PageNotFound />} />

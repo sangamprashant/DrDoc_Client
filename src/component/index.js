@@ -1,5 +1,6 @@
 import Contact from "./Contact/Contact";
 import Container from "./Container/Container";
+import DoctorProfile from "./Doctor";
 import Footer from "./Footer";
 import Home from "./Home/Home";
 import ChangePassword from "./Log/ChangePassword";
@@ -34,4 +35,5 @@ export {
   Message,
   MyDoctor,
   ChangePassword,
+  DoctorProfile,
 };
