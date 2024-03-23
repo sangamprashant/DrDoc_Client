@@ -6,22 +6,48 @@ import { Image } from "antd";
 import "./DoctorProfile.css";
 import axios from "axios";
 import { BASE_API } from "../../config";
+import { AuthContext } from "../../AuthContext";
 
 function DoctorProfile() {
   const { id } = useParams();
-  const [user, setUser] = React.useState(null);
+  const [userSearched, setUserSearched] = React.useState(null);
+  const [isAlready, setIsAlready] = React.useState(false);
+  const {
+    token,
+    setModal2Open,
+    setModelType,
+    setModelMessgae,
+    LoggedUserData,
+    setLoggedUserData,
+  } = React.useContext(AuthContext);
 
   React.useEffect(() => {
     if (id) {
       fetchData();
     }
   }, [id]);
+  React.useEffect(() => {
+    if (LoggedUserData && userSearched) {
+      console.log("LoggedUserData:",LoggedUserData)
+      console.log("userSearched:",userSearched)
+      // Check if both doctor and client are already connected
+      if (
+        LoggedUserData?.my_doctors?.includes(id) &&
+        userSearched?.my_clients?.includes(LoggedUserData?._id)
+      ) {
+        console.log(true)
+        setIsAlready(true);
+      } else {
+        setIsAlready(false);
+      }
+    }
+  }, [LoggedUserData, userSearched]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_API}/common/profile/${id}`);
       if (response.data.success) {
-        setUser(response.data.user);
+        setUserSearched(response.data.user);
       }
     } catch (error) {
       console.log("failed to fetch the doctor:", error);
@@ -29,96 +55,129 @@ function DoctorProfile() {
     }
   };
 
+  const addAsMyDoctor = async () => {
+    try {
+      const response = await axios.get(`${BASE_API}/common/add-doctor/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.success) {
+        setModelMessgae(response.data.message || "Doctor addes successfully");
+        setModelType("Success");
+        setModal2Open(true);
+        setLoggedUserData(response.data.client);
+        setUserSearched(response.data.doctor);
+      }
+    } catch (error) {
+      console.log("failed to add doctor:", error);
+      setModelMessgae(error.response.data.message || "Something went wrong");
+      setModelType("Error");
+      setModal2Open(true);
+    } finally {
+    }
+  };
+
   return (
     <Container>
-      {user && (
-        <div class="" style={{ paddingTop: "100px" }}>
-          <div class="profile-card js-profile-card shadow-lg">
-            <div class="profile-card__img">
+      {userSearched && (
+        <div className="" style={{ paddingTop: "100px" }}>
+          <div className="profile-card js-profile-card shadow-lg">
+            <div className="profile-card__img">
               <img
-                src={user?.personal?.image || UserImage}
+                src={userSearched?.personal?.image || UserImage}
                 alt="profile card"
               />
             </div>
 
-            <div class="profile-card__cnt js-profile-cnt">
-              <div class="profile-card__name">{user.name}</div>
-              <div class="profile-card__txt">
+            <div className="profile-card__cnt js-profile-cnt">
+              <div className="profile-card__name">{userSearched.name}</div>
+              <div className="profile-card__txt">
                 Specialization in{" "}
-                <strong>{user?.hospital?.specialization}</strong>
+                <strong>{userSearched?.hospital?.specialization}</strong>
               </div>
-              <div class="profile-card-loc">
-                <span class="profile-card-loc__icon">
+              <div className="profile-card-loc">
+                <span className="profile-card-loc__icon">
                   {/* <LocationOnIcon /> */}
                 </span>
 
-                <span class="profile-card-loc__txt">
-                  {user?.hospital?.hospitalName}, {user?.hospital?.location}
+                <span className="profile-card-loc__txt">
+                  {userSearched?.hospital?.hospitalName},{" "}
+                  {userSearched?.hospital?.location}
                 </span>
               </div>
 
-              <div class="profile-card-inf">
-                <div class="profile-card-inf__item">
-                  <div class="profile-card-inf__title">
-                    {user?.hospital?.experienceYears}
+              <div className="profile-card-inf">
+                <div className="profile-card-inf__item">
+                  <div className="profile-card-inf__title">
+                    {userSearched?.hospital?.experienceYears}
                   </div>
-                  <div class="profile-card-inf__txt">Experience Years</div>
+                  <div className="profile-card-inf__txt">Experience Years</div>
                 </div>
 
-                <div class="profile-card-inf__item">
-                  <div class="profile-card-inf__title">
-                    {user?.hospital?.bedsAvailable}
+                <div className="profile-card-inf__item">
+                  <div className="profile-card-inf__title">
+                    {userSearched?.hospital?.bedsAvailable}
                   </div>
-                  <div class="profile-card-inf__txt">Beds Available</div>
+                  <div className="profile-card-inf__txt">Beds Available</div>
                 </div>
 
-                <div class="profile-card-inf__item">
-                  <div class="profile-card-inf__title">
-                    {user?.hospital?.perConsultantCharge}
+                <div className="profile-card-inf__item">
+                  <div className="profile-card-inf__title">
+                    {userSearched?.hospital?.perConsultantCharge}
                   </div>
-                  <div class="profile-card-inf__txt">Per Consultant Charge</div>
+                  <div className="profile-card-inf__txt">
+                    Per Consultant Charge
+                  </div>
                 </div>
 
-                <div class="profile-card-inf__item">
-                  <div class="profile-card-inf__title">
-                    {user?.hospital?.doctorDegree}
+                <div className="profile-card-inf__item">
+                  <div className="profile-card-inf__title">
+                    {userSearched?.hospital?.doctorDegree}
                   </div>
-                  <div class="profile-card-inf__txt">Degree</div>
+                  <div className="profile-card-inf__txt">Degree</div>
                 </div>
               </div>
 
-              <div class="profile-card-social">
+              <div className="profile-card-social">
                 <a
-                  href={`mailto:${user?.email}`}
-                  class="profile-card-social__item facebook"
+                  href={`mailto:${userSearched?.email}`}
+                  className="profile-card-social__item facebook"
                   target="_blank"
                 >
-                  <span class="icon-font">{/* <EmailIcon /> */}</span>
+                  <span className="icon-font">{/* <EmailIcon /> */}</span>
                 </a>
 
                 <a
-                  href={user?.hospital?.website}
-                  class="profile-card-social__item instagram"
+                  href={userSearched?.hospital?.website}
+                  className="profile-card-social__item instagram"
                   target="_blank"
                 >
-                  <span class="icon-font">{/* <PublicIcon /> */}</span>
+                  <span className="icon-font">{/* <PublicIcon /> */}</span>
                 </a>
                 <a
-                  href={user?.personal?.contactNumber}
-                  class="profile-card-social__item link"
+                  href={userSearched?.personal?.contactNumber}
+                  className="profile-card-social__item link"
                   target="_blank"
                 >
-                  <span class="icon-font">{/* <LocalPhoneIcon /> */}</span>
+                  <span className="icon-font">{/* <LocalPhoneIcon /> */}</span>
                 </a>
               </div>
 
-              <div class="profile-card-ctr">
-                <button class="profile-card__button button--blue js-message-btn">
+              <div className="profile-card-ctr">
+                <button className="profile-card__button button--blue js-message-btn">
                   Message
                 </button>
-                <button class="profile-card__button button--orange">
-                  My Doctor
-                </button>
+                {isAlready ? (
+                  ""
+                ) : (
+                  <button
+                    className="profile-card__button button--orange"
+                    onClick={addAsMyDoctor}
+                  >
+                    My Doctor
+                  </button>
+                )}
               </div>
 
               {/* other details */}
@@ -127,7 +186,7 @@ function DoctorProfile() {
                 <details className="mt-3">
                   <summary>Hospital's images</summary>
                   <div className="d-flex flex-wrap gap-2">
-                    {user?.hospital?.images?.map((data, index) => (
+                    {userSearched?.hospital?.images?.map((data, index) => (
                       <Image
                         key={index}
                         src={data}
@@ -142,7 +201,7 @@ function DoctorProfile() {
                   <summary>Doctor's degree</summary>
                   <div className="d-flex flex-wrap gap-2">
                     <Image
-                      src={user?.hospital?.doctorDegreeFile}
+                      src={userSearched?.hospital?.doctorDegreeFile}
                       alt=""
                       height={100}
                       width={100}
@@ -151,37 +210,37 @@ function DoctorProfile() {
                 </details>
                 <details className="mt-3">
                   <summary>Address</summary>
-                  <p>{user?.address?.address}</p>
+                  <p>{userSearched?.address?.address}</p>
                   <p>
-                    {user?.address?.city} {user?.address?.state}{" "}
-                    {user?.address?.country}
+                    {userSearched?.address?.city} {userSearched?.address?.state}{" "}
+                    {userSearched?.address?.country}
                   </p>
                   <p>
-                    {user?.address?.latitude
-                      ? `"Latitude:"${user?.address?.latitude}`
+                    {userSearched?.address?.latitude
+                      ? `"Latitude:"${userSearched?.address?.latitude}`
                       : ""}
-                    {user?.address?.longitude
-                      ? `"Longitude:"${user?.address?.longitude}`
+                    {userSearched?.address?.longitude
+                      ? `"Longitude:"${userSearched?.address?.longitude}`
                       : ""}
                   </p>
                 </details>
               </div>
 
-              <form class="profile-card-form">
-                <div class="profile-card-form__container">
+              {/* <form className="profile-card-form">
+                <div className="profile-card-form__container">
                   <textarea placeholder="Say something..."></textarea>
                 </div>
 
-                <div class="profile-card-form__bottom">
-                  <button class="profile-card__button button--blue js-message-close">
+                <div className="profile-card-form__bottom">
+                  <button className="profile-card__button button--blue js-message-close">
                     Send
                   </button>
 
-                  <button class="profile-card__button button--gray js-message-close">
+                  <button className="profile-card__button button--gray js-message-close">
                     Cancel
                   </button>
                 </div>
-              </form>
+              </form> */}
             </div>
           </div>
         </div>
