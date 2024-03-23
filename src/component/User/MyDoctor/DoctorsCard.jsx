@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const DoctorsCard = () => {
+const DoctorsCard = ({ data }) => {
   return (
-    <li class="cards__item">
+    <li class="cards__item col-md-3">
       <div class="card">
         <div
           class="card__image"
@@ -12,13 +13,20 @@ const DoctorsCard = () => {
           }}
         ></div>
         <div class="card__content">
-          <div class="card__title">Flex</div>
+          <div class="card__title">{data.name}</div>
           <p class="card__text">
-            This is the shorthand for flex-grow, flex-shrink and flex-basis
-            combined. The second and third parameters (flex-shrink and
-            flex-basis) are optional. Default is 0 1 auto.{" "}
+            <p>
+              Specialization in{" "}
+              <strong>{data?.hospital?.specialization}</strong>
+            </p>
+            <p>Location: {data?.hospital?.location}</p>
           </p>
-          <button class="btn  card__btn btn-outline-dark">View Profile</button>
+          <Link
+            to={`/doctor/${data._id}`}
+            class="btn  card__btn btn-outline-dark"
+          >
+            View Profile
+          </Link>
         </div>
       </div>
     </li>

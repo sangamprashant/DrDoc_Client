@@ -26,20 +26,20 @@ function DoctorProfile() {
       fetchData();
     }
   }, [id]);
+
   React.useEffect(() => {
     if (LoggedUserData && userSearched) {
-      console.log("LoggedUserData:",LoggedUserData)
-      console.log("userSearched:",userSearched)
-      // Check if both doctor and client are already connected
-      if (
-        LoggedUserData?.my_doctors?.includes(id) &&
-        userSearched?.my_clients?.includes(LoggedUserData?._id)
-      ) {
-        console.log(true)
-        setIsAlready(true);
-      } else {
-        setIsAlready(false);
-      }
+      const doctorId = String(userSearched._id);
+      const clientId = String(LoggedUserData._id);
+      console.log("doctorId", doctorId);
+      console.log("clientId", clientId);
+      const isDoctorAdded = LoggedUserData.my_doctors.includes(doctorId);
+      console.log("isDoctorAdded", isDoctorAdded);
+      const isClientAdded = userSearched.my_clients.includes(clientId);
+      console.log("isClientAdded", isClientAdded);
+
+      console.log(isDoctorAdded && isClientAdded);
+      setIsAlready(isDoctorAdded && isClientAdded);
     }
   }, [LoggedUserData, userSearched]);
 
@@ -71,6 +71,28 @@ function DoctorProfile() {
       }
     } catch (error) {
       console.log("failed to add doctor:", error);
+      setModelMessgae(error.response.data.message || "Something went wrong");
+      setModelType("Error");
+      setModal2Open(true);
+    } finally {
+    }
+  };
+  const removeAsMyDoctor = async () => {
+    try {
+      const response = await axios.get(`${BASE_API}/common/remove-doctor/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.success) {
+        setModelMessgae(response.data.message || "Doctor removed successfully");
+        setModelType("Success");
+        setModal2Open(true);
+        setLoggedUserData(response.data.client);
+        setUserSearched(response.data.doctor);
+      }
+    } catch (error) {
+      console.log("failed to remove doctor:", error);
       setModelMessgae(error.response.data.message || "Something went wrong");
       setModelType("Error");
       setModal2Open(true);
@@ -169,13 +191,18 @@ function DoctorProfile() {
                   Message
                 </button>
                 {isAlready ? (
-                  ""
+                  <button
+                    className="profile-card__button button--orange"
+                    onClick={removeAsMyDoctor}
+                  >
+                    Remove My Doctor
+                  </button>
                 ) : (
                   <button
                     className="profile-card__button button--orange"
                     onClick={addAsMyDoctor}
                   >
-                    My Doctor
+                    Add My Doctor
                   </button>
                 )}
               </div>
