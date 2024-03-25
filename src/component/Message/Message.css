@@ -16,20 +16,18 @@
   --blue: #00b0ff;
 }
 
-
-.wrapper{
-    height: 100vh;
+.wrapper {
+  height: 100vh;
 }
 
-
-.container-message{
-    position: relative;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: 75%;
-    background-color: var(--white);
-    transform: translate(-50%, -50%);
+.container-message {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 75%;
+  background-color: var(--white);
+  transform: translate(-50%, -50%);
 }
 
 .container-message .left {
@@ -229,7 +227,7 @@
 .container-message .right .write {
   border: 1px solid var(--light);
   background-color: #eceff1;
-  width: 100% ;
+  width: 100%;
   padding: 10px 23px;
 }
 .container-message .right .bubble {
