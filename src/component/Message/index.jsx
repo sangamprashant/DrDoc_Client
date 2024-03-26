@@ -3,8 +3,32 @@ import "./Message.css";
 import { IconButton } from "component-craftsman";
 import { Icons } from "../../icons";
 import { theme } from "../rawdata";
+import { useNavigate } from "react-router-dom";
+import { BASE_API } from "../../config";
+import axios from "axios";
 
 const Message = () => {
+  const navigation = useNavigate();
+  const [query, setQuery] = React.useState("");
+
+  React.useLayoutEffect(() => {
+    fetchIfUser()
+  }, [window.location.search, navigation]);
+
+  const fetchIfUser = async () => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const queryString = queryParams.get("query");
+    try {
+      const data = JSON.parse(queryString);
+      const response = await axios.get(`${BASE_API}/common/profile/${data}`);
+      setQuery(response.data.user);
+    } catch (error) {
+      console.error("Error parsing query parameter:", error);
+    }
+  };
+
+  // console.log(query);
+
   return (
     <div class="wrapper">
       <div class="container-message">
@@ -16,7 +40,11 @@ const Message = () => {
                 placeholder="Search"
                 className="form-control py-4"
               />
-              <IconButton effect="jaques" icon={Icons.PersonSearchIcon} bg={1} />
+              <IconButton
+                effect="jaques"
+                icon={Icons.PersonSearchIcon}
+                bg={1}
+              />
             </div>
           </div>
           <ul class="people">
@@ -137,13 +165,22 @@ const Message = () => {
             </div>
             <div class="bubble you">Hello,</div>
             <div class="bubble you">it's me.</div>
-            <div class="bubble me">I was wondering...</div>      
+            <div class="bubble me">I was wondering...</div>
           </div>
           <div class="write">
-          <div className="d-flex gap-2">
-            <input type="text" className="form-control" placeholder="Message.."/>
-            <button className="btn text-white" style={{backgroundColor:theme}}>Send</button>
-          </div>
+            <div className="d-flex gap-2">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Message.."
+              />
+              <button
+                className="btn text-white"
+                style={{ backgroundColor: theme }}
+              >
+                Send
+              </button>
+            </div>
           </div>
         </div>
       </div>

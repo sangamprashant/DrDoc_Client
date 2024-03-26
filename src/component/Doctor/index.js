@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "../Container/Container";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { UserImage } from "../../assets";
 import { Image } from "antd";
 import "./DoctorProfile.css";
@@ -31,14 +31,8 @@ function DoctorProfile() {
     if (LoggedUserData && userSearched) {
       const doctorId = String(userSearched._id);
       const clientId = String(LoggedUserData._id);
-      console.log("doctorId", doctorId);
-      console.log("clientId", clientId);
       const isDoctorAdded = LoggedUserData.my_doctors.includes(doctorId);
-      console.log("isDoctorAdded", isDoctorAdded);
       const isClientAdded = userSearched.my_clients.includes(clientId);
-      console.log("isClientAdded", isClientAdded);
-
-      console.log(isDoctorAdded && isClientAdded);
       setIsAlready(isDoctorAdded && isClientAdded);
     }
   }, [LoggedUserData, userSearched]);
@@ -79,11 +73,14 @@ function DoctorProfile() {
   };
   const removeAsMyDoctor = async () => {
     try {
-      const response = await axios.get(`${BASE_API}/common/remove-doctor/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${BASE_API}/common/remove-doctor/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.data.success) {
         setModelMessgae(response.data.message || "Doctor removed successfully");
         setModelType("Success");
@@ -187,9 +184,12 @@ function DoctorProfile() {
               </div>
 
               <div className="profile-card-ctr">
-                <button className="profile-card__button button--blue js-message-btn">
+                <Link
+                  className="profile-card__button button--blue js-message-btn"
+                  to={`/message?query=${id}`}
+                >
                   Message
-                </button>
+                </Link>
                 {isAlready ? (
                   <button
                     className="profile-card__button button--orange"
