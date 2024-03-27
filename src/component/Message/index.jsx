@@ -6,13 +6,20 @@ import { theme } from "../rawdata";
 import { useNavigate } from "react-router-dom";
 import { BASE_API } from "../../config";
 import axios from "axios";
+import { AuthContext } from "../../AuthContext";
+import { UserImage } from "../../assets";
 
 const Message = () => {
   const navigation = useNavigate();
+  const { token, LoggedUserData } = React.useContext(AuthContext);
   const [query, setQuery] = React.useState("");
+  const [messages, setMessages] = React.useState([]);
+  const [activeChat, setActiveChat] = React.useState(null);
+
+  console.log("LoggedUserData:", LoggedUserData);
 
   React.useLayoutEffect(() => {
-    fetchIfUser()
+    fetchIfUser();
   }, [window.location.search, navigation]);
 
   const fetchIfUser = async () => {
@@ -20,14 +27,44 @@ const Message = () => {
     const queryString = queryParams.get("query");
     try {
       const data = JSON.parse(queryString);
-      const response = await axios.get(`${BASE_API}/common/profile/${data}`);
-      setQuery(response.data.user);
+      if (data) {
+        const response = await axios.get(`${BASE_API}/common/profile/${data}`);
+        setQuery(response.data.user);
+      }
     } catch (error) {
       console.error("Error parsing query parameter:", error);
     }
   };
 
   // console.log(query);
+
+  React.useLayoutEffect(() => {
+    if (token) {
+      fetchUsersAndMessage();
+    }
+  }, [token]);
+
+  const fetchUsersAndMessage = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_API}/common/message/conversations`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setMessages(response.data.conversations);
+      }
+
+      console.log(response.data.conversations);
+    } catch (error) {
+      console.log("failed to get the messages:", error);
+    } finally {
+    }
+  };
 
   return (
     <div class="wrapper">
@@ -48,109 +85,30 @@ const Message = () => {
             </div>
           </div>
           <ul class="people">
-            <li class="person" data-chat="person1">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg"
-                alt=""
-              />
-              <span class="name">Thomas Bangalter</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">I was wondering...</span>
-            </li>
-            <li class="person" data-chat="person2">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/dog.png"
-                alt=""
-              />
-              <span class="name">Dog Woofson</span>
-              <span class="time">1:44 PM</span>
-              <span class="preview">I've forgotten how it felt before</span>
-            </li>
-            <li class="person" data-chat="person3">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/louis-ck.jpeg"
-                alt=""
-              />
-              <span class="name">Louis CK</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">
-                But we’re probably gonna need a new carpet.
-              </span>
-            </li>
-            <li class="person" data-chat="person4">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/bo-jackson.jpg"
-                alt=""
-              />
-              <span class="name">Bo Jackson</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">It’s not that bad...</span>
-            </li>
-            <li class="person" data-chat="person5">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/michael-jordan.jpg"
-                alt=""
-              />
-              <span class="name">Michael Jordan</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">
-                Wasup for the third time like is you blind bitch
-              </span>
-            </li>
-            <li class="person" data-chat="person6">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/drake.jpg"
-                alt=""
-              />
-              <span class="name">Drake</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">howdoyoudoaspace</span>
-            </li>
-            <li class="person" data-chat="person6">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/drake.jpg"
-                alt=""
-              />
-              <span class="name">Drake</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">howdoyoudoaspace</span>
-            </li>
-            <li class="person" data-chat="person6">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/drake.jpg"
-                alt=""
-              />
-              <span class="name">Drake</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">howdoyoudoaspace</span>
-            </li>
-            <li class="person" data-chat="person6">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/drake.jpg"
-                alt=""
-              />
-              <span class="name">Drake</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">howdoyoudoaspace</span>
-            </li>
-            <li class="person" data-chat="person6">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/drake.jpg"
-                alt=""
-              />
-              <span class="name">Drake</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">howdoyoudoaspace</span>
-            </li>
-            <li class="person" data-chat="person6">
-              <img
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/drake.jpg"
-                alt=""
-              />
-              <span class="name">Drake</span>
-              <span class="time">2:09 PM</span>
-              <span class="preview">howdoyoudoaspace</span>
-            </li>
+            {messages?.map((data, index) => (
+              <React.Fragment key={index + Math.random()}>
+                {data?.participants?.map((part, i) => (
+                  <React.Fragment key={index * i + Math.random()}>
+                    {LoggedUserData?._id !== part._id && (
+                      <li
+                        class="person"
+                        data-chat=""
+                        onClick={() => setActiveChat(messages)}
+                      >
+                        <img
+                          src={part?.personal?.image || UserImage}
+                          alt=""
+                          className=" object-fit-cover"
+                        />
+                        <span class="name">{part?.name}</span>
+                        <span class="time">2:09 PM</span>
+                        <span class="preview">I was wondering...</span>
+                      </li>
+                    )}
+                  </React.Fragment>
+                ))}
+              </React.Fragment>
+            ))}
           </ul>
         </div>
         <div class="right">
